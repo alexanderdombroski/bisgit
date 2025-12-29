@@ -1,7 +1,14 @@
 {
   "name": "bisgit",
-  "version": "1.0.0",
+  "version": "0.0.0",
   "description": "Git CLI tool to simplify common advanced git workflows",
+  "main": "dist/main.js",
+	"bin": {
+		"esbuild-lazy-analyzer": "dist/main.js"
+	},
+	"files": [
+		"dist/main.js"
+	],
   "keywords": [
     "git",
     "cli",
@@ -20,10 +27,16 @@
   "author": "Alex Dombroski",
   "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "node esbuild.mjs --watch",
+    "package": "rm -rf dist && node esbuild.mjs --production",
     "prepare": "husky"
   },
   "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^8.51.0",
+    "@typescript-eslint/parser": "^8.51.0",
+    "esbuild": "^0.27.2",
+    "eslint": "^9.39.2",
+    "eslint-plugin-import": "^2.32.0",
     "husky": "^9.1.7",
     "lint-staged": "^16.2.7",
     "prettier": "^3.7.4"
