@@ -1,0 +1,25 @@
+{
+  "name": "bisgit",
+  "version": "1.0.0",
+  "description": "Git CLI tool to simplify common advanced git workflows",
+  "keywords": [
+    "git",
+    "cli",
+    "tui",
+    "github"
+  ],
+  "homepage": "https://github.com/alexanderdombroski/bisgit#readme",
+  "bugs": {
+    "url": "https://github.com/alexanderdombroski/bisgit/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alexanderdombroski/bisgit.git"
+  },
+  "license": "MIT",
+  "author": "Alex Dombroski",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  }
+}
