@@ -3,12 +3,12 @@
   "version": "0.0.0",
   "description": "Git CLI tool to simplify common advanced git workflows",
   "main": "dist/main.js",
-	"bin": {
-		"esbuild-lazy-analyzer": "dist/main.js"
-	},
-	"files": [
-		"dist/main.js"
-	],
+  "bin": {
+    "esbuild-lazy-analyzer": "dist/main.js"
+  },
+  "files": [
+    "dist/main.js"
+  ],
   "keywords": [
     "git",
     "cli",
@@ -27,11 +27,13 @@
   "author": "Alex Dombroski",
   "type": "module",
   "scripts": {
+    "start": "node dist/main.js",
     "build": "node esbuild.mjs --watch",
     "package": "rm -rf dist && node esbuild.mjs --production",
     "prepare": "husky"
   },
   "devDependencies": {
+    "@types/node": "^25.0.3",
     "@typescript-eslint/eslint-plugin": "^8.51.0",
     "@typescript-eslint/parser": "^8.51.0",
     "esbuild": "^0.27.2",
