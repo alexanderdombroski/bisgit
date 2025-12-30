@@ -28,12 +28,14 @@
   "type": "module",
   "scripts": {
     "start": "node dist/main.js",
+    "dev": "node esbuild.mjs && node dist/main.js",
     "build": "node esbuild.mjs --watch",
     "package": "rm -rf dist && node esbuild.mjs --production",
     "prepare": "husky"
   },
   "devDependencies": {
     "@types/node": "^25.0.3",
+    "@types/react": "^19.2.7",
     "@typescript-eslint/eslint-plugin": "^8.51.0",
     "@typescript-eslint/parser": "^8.51.0",
     "esbuild": "^0.27.2",
@@ -42,5 +44,10 @@
     "husky": "^9.1.7",
     "lint-staged": "^16.2.7",
     "prettier": "^3.7.4"
+  },
+  "dependencies": {
+    "ink": "^6.6.0",
+    "react": "^19.2.3",
+    "react-devtools-core": "^6.1.5"
   }
 }

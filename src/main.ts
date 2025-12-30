@@ -1,5 +1,7 @@
+import { renderApp } from './demo';
+
 async function main() {
-	console.log('HELLO WORLD!');
+	renderApp();
 }
 
 main().catch((error) => {

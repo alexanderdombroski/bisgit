@@ -24,7 +24,7 @@ const esbuildProblemMatcherPlugin = {
 	},
 };
 
-async function main() {;
+async function main() {
 	const ctx = await context({
 		entryPoints: ['src/main.ts'],
 		bundle: true,
@@ -38,7 +38,11 @@ async function main() {;
 		outdir: 'dist',
 		banner: { js: '#!/usr/bin/env node' },
 		splitting: true,
-		external: [...(await import('node:module')).builtinModules],
+		jsx: 'automatic',
+		external: [
+			...(await import('node:module')).builtinModules,
+			...(await fs.readdir('node_modules')).filter((x) => x !== '.bin'),
+		],
 		logLevel: 'silent',
 		plugins: [esbuildProblemMatcherPlugin],
 		minifySyntax: true,
