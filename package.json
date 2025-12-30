@@ -46,6 +46,7 @@
     "prettier": "^3.7.4"
   },
   "dependencies": {
+    "clipboardy": "^5.0.2",
     "ink": "^6.6.0",
     "react": "^19.2.3",
     "react-devtools-core": "^6.1.5"

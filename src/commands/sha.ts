@@ -1,0 +1,17 @@
+import { execSync } from 'node:child_process';
+import { requireRootCommit } from './guards';
+import clipboard from 'clipboardy';
+
+/** handler for sha command */
+export async function sha() {
+	requireRootCommit();
+
+	const sha = getShortSha(process.argv[3]);
+	await clipboard.write(sha);
+	console.log(`'${sha}' copied to clipboard`);
+}
+
+/** runs rev-parse to get the short sha id of a ref */
+export function getShortSha(ref = 'HEAD') {
+	return execSync(`git rev-parse --short ${ref}`, { encoding: 'utf-8' }).trim();
+}

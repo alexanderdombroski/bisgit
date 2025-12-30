@@ -19,6 +19,17 @@ export function getArg(argName: string): string | undefined {
 	return undefined;
 }
 
+/**
+ * process.argv[0] → /usr/local/bin/node
+ * process.argv[1] → ~/.nvm/versions/node/v24.11.0/bin/bisgit/dist/main.js
+ * process.argv[2] → "rev-parse"
+ * process.argv[3] → "HEAD"
+ */
+
 export function getCommand(): string | undefined {
 	return process.argv[2];
+}
+
+export function getArgList(): string[] {
+	return process.argv.slice(3);
 }
