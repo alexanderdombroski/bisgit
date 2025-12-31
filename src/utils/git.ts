@@ -1,4 +1,5 @@
 import { exec } from 'node:child_process';
+import { normalize } from 'node:path';
 import { promisify } from 'node:util';
 
 const execAsync = promisify(exec);
@@ -34,4 +35,9 @@ export async function commitsBehind(remote: string, branch: string): Promise<num
 		console.error('Error getting commits behind:', error);
 		return NaN;
 	}
+}
+
+export async function getGitConfigPath(file: string) {
+	const { stdout } = await execAsync(`git rev-parse --git-path ${file}`);
+	return normalize(stdout.trim());
 }

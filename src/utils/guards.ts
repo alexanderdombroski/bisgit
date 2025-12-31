@@ -1,4 +1,5 @@
 import { spawnSync } from 'node:child_process';
+import { exists } from './fs';
 
 function requireZeroStatus(cmd: string, args: string[], errorMessage?: string) {
 	const res = spawnSync(cmd, args, { stdio: 'ignore' });
@@ -27,4 +28,11 @@ export const requireCleanStatus = () => {
 	const msg = 'You should stash or commit your changes first.';
 	requireZeroStatus('git', ['diff', '--quiet'], msg);
 	requireZeroStatus('git', ['diff', '--cached', '--quiet'], msg);
+};
+
+export const requireFileExists = async (fp: string) => {
+	if (!(await exists(fp))) {
+		console.error(`${fp} must exist for this operation and it doesn't for some reason`);
+		process.exit(1);
+	}
 };
