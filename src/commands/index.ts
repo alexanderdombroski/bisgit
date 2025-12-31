@@ -5,6 +5,7 @@ import { files } from './files';
 import { include } from './include';
 import { pwd } from './pwd';
 import { remoteDefault } from './remoteDefault';
+import { savepoint } from './savepoint';
 import { sha } from './sha';
 
 const commands: Record<string, () => void | Promise<void>> = {
@@ -15,6 +16,7 @@ const commands: Record<string, () => void | Promise<void>> = {
 	include,
 	pwd,
 	'remote-default': remoteDefault,
+	savepoint,
 	sha,
 };
 
