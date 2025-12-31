@@ -2,6 +2,7 @@ import { spawn, type SpawnOptions, type StdioOptions } from 'node:child_process'
 
 type Options = SpawnOptions & {
 	silent?: boolean;
+	triggerExit?: boolean;
 };
 
 export function spawnCommand(cmd: string, args: string[], options?: Options) {
@@ -9,15 +10,17 @@ export function spawnCommand(cmd: string, args: string[], options?: Options) {
 
 	if (!options?.silent) {
 		childProcess.stdout?.on('data', (data) => {
-			console.log(data);
+			console.log(String(data));
 		});
 		childProcess.stderr?.on('data', (data) => {
-			console.error(`stderr: ${data}`);
-		});
-		childProcess.on('close', (code) => {
-			console.log(`Git process exited with code ${code}`);
+			console.error(String(data));
 		});
 	}
+	childProcess.on('close', (code) => {
+		if (options?.triggerExit) {
+			process.exit(code);
+		}
+	});
 }
 
 export async function spawnGitWithColor(args: string[], stdio: StdioOptions = 'inherit') {
