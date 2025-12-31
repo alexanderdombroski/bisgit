@@ -1,9 +1,11 @@
+import { backmerge } from './backMerge';
 import { remoteDefault } from './remoteDefault';
 import { sha } from './sha';
 
 const commands: Record<string, () => void | Promise<void>> = {
 	'remote-default': remoteDefault,
-	sha: sha,
+	sha,
+	backmerge,
 };
 
 /** returns true if it ran */

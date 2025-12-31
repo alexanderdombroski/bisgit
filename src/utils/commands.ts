@@ -9,7 +9,7 @@ export function spawnCommand(cmd: string, args: string[], options?: Options) {
 
 	if (!options?.silent) {
 		childProcess.stdout?.on('data', (data) => {
-			console.log(`stdout: ${data}`);
+			console.log(data);
 		});
 		childProcess.stderr?.on('data', (data) => {
 			console.error(`stderr: ${data}`);
@@ -18,4 +18,25 @@ export function spawnCommand(cmd: string, args: string[], options?: Options) {
 			console.log(`Git process exited with code ${code}`);
 		});
 	}
+}
+
+export async function spawnGitWithColor(args: string[]) {
+	const { promise, resolve, reject } = Promise.withResolvers<{
+		code: number | null;
+	}>();
+
+	const child = spawn('git', ['-c', 'color.ui=always', ...args], {
+		stdio: 'inherit',
+	});
+
+	child.on('close', (code) => {
+		if (code === 0) {
+			resolve({ code });
+		} else {
+			reject({ code });
+		}
+	});
+	child.on('error', reject);
+
+	return promise;
 }
