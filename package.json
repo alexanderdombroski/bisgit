@@ -31,6 +31,9 @@
     "dev": "node esbuild.mjs && node dist/main.js",
     "build": "node esbuild.mjs --watch",
     "package": "rm -rf dist && node esbuild.mjs --production",
+    "profile": "npm-run-all -p profile:*",
+		"profile:size": "esbuild-visualizer --metadata ./profile/meta.json --filename ./profile/visualizer.html && open ./profile/visualizer.html",
+		"profile:lazy": "esbuild-lazy-analyzer --metafile ./profile/meta.json --outmeta ./profile/lazy.json --outreport ./profile/lazy.html && open ./profile/lazy.html",
     "gi": "npm run package && node dist/main.js",
     "lint": "eslint src",
     "check-types": "tsc --noEmit",
@@ -42,10 +45,13 @@
     "@typescript-eslint/eslint-plugin": "^8.51.0",
     "@typescript-eslint/parser": "^8.51.0",
     "esbuild": "^0.27.2",
+    "esbuild-lazy-analyzer": "^1.4.0",
+    "esbuild-visualizer": "^0.7.0",
     "eslint": "^9.39.2",
     "eslint-plugin-import": "^2.32.0",
     "husky": "^9.1.7",
     "lint-staged": "^16.2.7",
+    "npm-run-all": "^4.1.5",
     "prettier": "^3.7.4"
   },
   "dependencies": {
