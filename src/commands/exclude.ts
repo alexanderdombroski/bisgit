@@ -1,5 +1,5 @@
 import { appendFileSync } from 'node:fs';
-import { getArgList } from '../utils/cli';
+import { getArgList } from '../utils/args';
 import { getGitConfigPath } from '../utils/git';
 import { requireFileExists } from '../utils/guards';
 import { parseIgnoreFile } from '../utils/ignore';

@@ -33,3 +33,17 @@ export function getCommand(): string | undefined {
 export function getArgList(): string[] {
 	return process.argv.slice(3);
 }
+
+/** Gets args \<remote> \<branch> or `origin` \<branch> if only one arg passed in */
+export async function getRemoteBranchArgs(): Promise<{ remote: string; branch: string }> {
+	const [arg1, arg2] = getArgList();
+
+	if (!arg1) {
+		console.error('Requires <branch> or <remote> <branch>');
+		process.exit(1);
+	}
+
+	if (arg2) return { remote: arg1, branch: arg2 };
+
+	return { remote: 'origin', branch: arg1 };
+}

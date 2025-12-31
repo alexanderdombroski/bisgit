@@ -1,4 +1,4 @@
-import { getArgList } from '../utils/cli';
+import { getArgList } from '../utils/args';
 import { spawnCommand } from '../utils/commands';
 
 export function amend() {

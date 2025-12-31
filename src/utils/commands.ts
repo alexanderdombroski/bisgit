@@ -1,4 +1,5 @@
-import { spawn, type SpawnOptions, type StdioOptions } from 'node:child_process';
+import { spawn } from 'node:child_process';
+import type { SpawnOptions, StdioOptions } from 'node:child_process';
 
 type Options = SpawnOptions & {
 	silent?: boolean;
@@ -21,6 +22,26 @@ export function spawnCommand(cmd: string, args: string[], options?: Options) {
 			process.exit(code);
 		}
 	});
+}
+
+export async function spawnAsync(cmd: string, args: string[], options: SpawnOptions = {}) {
+	const { promise, resolve, reject } = Promise.withResolvers<{
+		code: number | null;
+		stdout?: string;
+		stderr?: string;
+	}>();
+
+	const child = spawn(cmd, args, options);
+	let stdout = '';
+	let stderr = '';
+
+	child.stdout?.on('data', (d) => (stdout += d));
+	child.stderr?.on('data', (d) => (stderr += d));
+
+	child.on('close', (code) => resolve({ code, stdout, stderr }));
+	child.on('error', (err) => reject(err));
+
+	return promise;
 }
 
 export async function spawnGitWithColor(args: string[], stdio: StdioOptions = 'inherit') {

@@ -15,7 +15,7 @@ export const requireRootCommit = () =>
 
 /** Exits 1 if no origin remote */
 export const requireRemote = (name = 'origin') =>
-	requireZeroStatus('git', ['remote', 'get-url', name], `Need to add ${name} remote.`);
+	requireZeroStatus('git', ['remote', 'get-url', name], `Need to add remote '${name}'.`);
 
 export const requireBranch = (name: string) =>
 	requireZeroStatus(

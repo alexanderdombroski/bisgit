@@ -1,6 +1,7 @@
 import { exec } from 'node:child_process';
 import { normalize } from 'node:path';
 import { promisify } from 'node:util';
+import { spawnAsync } from './commands';
 
 const execAsync = promisify(exec);
 
@@ -40,4 +41,10 @@ export async function commitsBehind(remote: string, branch: string): Promise<num
 export async function getGitConfigPath(file: string) {
 	const { stdout } = await execAsync(`git rev-parse --git-path ${file}`);
 	return normalize(stdout.trim());
+}
+
+// eslint-disable-next-line no-unused-vars
+async function isValidRemote(name: string): Promise<boolean> {
+	const { code } = await spawnAsync('git', ['remote', 'get-url', name], { stdio: 'ignore' });
+	return code === 0;
 }

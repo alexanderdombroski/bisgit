@@ -1,4 +1,4 @@
-import { getCommand } from './utils/cli';
+import { getCommand } from './utils/args';
 
 async function main() {
 	const cmd = getCommand();
@@ -18,5 +18,9 @@ async function main() {
 }
 
 main().catch((error) => {
+	if (typeof error === 'object') {
+		error = JSON.stringify(error, undefined, 2);
+	}
 	console.error(`An error occurred: ${error}`);
+	process.exit(1);
 });
