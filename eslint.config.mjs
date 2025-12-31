@@ -44,6 +44,7 @@ export default [
 			eqeqeq: 'warn',
 			'no-throw-literal': 'warn',
 			semi: 'warn',
+			'@typescript-eslint/consistent-type-imports': "warn"
 		},
 	},
 	{

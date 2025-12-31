@@ -1,5 +1,5 @@
 import { execSync } from 'node:child_process';
-import { requireRootCommit } from './guards';
+import { requireRootCommit } from '../utils/guards';
 import clipboard from 'clipboardy';
 
 /** handler for sha command */

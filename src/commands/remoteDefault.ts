@@ -1,5 +1,5 @@
 import { execSync, spawnSync } from 'node:child_process';
-import { requireRemote, requireRootCommit } from './guards';
+import { requireRemote, requireRootCommit } from '../utils/guards';
 
 /** Returns origin/HEAD ie 'origin/main' or 'origin/master' */
 export function getRemoteDefault(): string {

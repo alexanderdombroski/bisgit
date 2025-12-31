@@ -74,5 +74,5 @@ export async function smartPull(remote: string, branch: string) {
 	}
 
 	// Hope for no merge conflicts
-	await spawnGitWithColor(['merge', `${remote}/${branch}`]);
+	await spawnGitWithColor(['merge', `${remote}/${branch}`], ['ignore', 'ignore', 'inherit']);
 }

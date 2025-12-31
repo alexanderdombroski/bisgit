@@ -31,6 +31,7 @@
     "dev": "node esbuild.mjs && node dist/main.js",
     "build": "node esbuild.mjs --watch",
     "package": "rm -rf dist && node esbuild.mjs --production",
+    "lint": "eslint src && tsc --noEmit",
     "prepare": "husky"
   },
   "devDependencies": {

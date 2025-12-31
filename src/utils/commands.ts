@@ -1,4 +1,4 @@
-import { spawn, SpawnOptions } from 'node:child_process';
+import { spawn, type SpawnOptions, type StdioOptions } from 'node:child_process';
 
 type Options = SpawnOptions & {
 	silent?: boolean;
@@ -20,13 +20,13 @@ export function spawnCommand(cmd: string, args: string[], options?: Options) {
 	}
 }
 
-export async function spawnGitWithColor(args: string[]) {
+export async function spawnGitWithColor(args: string[], stdio: StdioOptions = 'inherit') {
 	const { promise, resolve, reject } = Promise.withResolvers<{
 		code: number | null;
 	}>();
 
 	const child = spawn('git', ['-c', 'color.ui=always', ...args], {
-		stdio: 'inherit',
+		stdio,
 	});
 
 	child.on('close', (code) => {
