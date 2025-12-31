@@ -1,6 +1,7 @@
 import { amend } from './amend';
 import { backmerge } from './backMerge';
 import { files } from './files';
+import { pwd } from './pwd';
 import { remoteDefault } from './remoteDefault';
 import { sha } from './sha';
 
@@ -8,6 +9,7 @@ const commands: Record<string, () => void | Promise<void>> = {
 	amend,
 	backmerge,
 	files,
+	pwd,
 	'remote-default': remoteDefault,
 	sha,
 };
