@@ -4,10 +4,11 @@
   "description": "Git CLI tool to simplify common advanced git workflows",
   "main": "dist/main.js",
   "bin": {
-    "esbuild-lazy-analyzer": "dist/main.js"
+    "bisgit": "dist/main.js",
+    "gi": "dist/main.js"
   },
   "files": [
-    "dist/main.js"
+    "dist"
   ],
   "keywords": [
     "git",
