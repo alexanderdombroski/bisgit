@@ -1,4 +1,4 @@
-import { exec } from 'node:child_process';
+import { exec, type SpawnOptions } from 'node:child_process';
 import { normalize } from 'node:path';
 import { promisify } from 'node:util';
 import { spawnAsync } from './commands';
@@ -47,4 +47,26 @@ export async function getGitConfigPath(file: string) {
 async function isValidRemote(name: string): Promise<boolean> {
 	const { code } = await spawnAsync('git', ['remote', 'get-url', name], { stdio: 'ignore' });
 	return code === 0;
+}
+
+export async function isHeadDetached() {
+	const { stdout } = await execAsync('git rev-parse --abbrev-ref HEAD');
+	return stdout.trim() === 'HEAD';
+}
+
+export async function gitFetch(remote?: string, branch?: string) {
+	let cmd = 'git fetch';
+	if (remote) cmd += ` ${remote}`;
+	if (branch) cmd += ` ${branch}`;
+
+	await execAsync(cmd);
+}
+
+export async function isDiffClean() {
+	const opts: SpawnOptions = { stdio: 'ignore' };
+	const [res1, res2] = await Promise.all([
+		spawnAsync('git', ['diff', '--quiet'], opts),
+		spawnAsync('git', ['diff', '--cached', '--quiet'], opts),
+	]);
+	return res1.code === 0 && res2.code === 0;
 }

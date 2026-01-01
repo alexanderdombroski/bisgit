@@ -8,7 +8,7 @@ export default [
 		ignores: ['node_modules/**', 'dist/**'],
 	},
 	{
-		files: ['**/*.ts'],
+		files: ['**/*.ts', '**/*.tsx'],
 	},
 	{
 		plugins: {

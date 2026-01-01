@@ -8,6 +8,7 @@ import { remoteDefault } from './remoteDefault';
 import { savepoint } from './savepoint';
 import { sha } from './sha';
 import { track } from './track';
+import { yank } from './yank';
 
 const commands: Record<string, () => void | Promise<void>> = {
 	amend,
@@ -20,6 +21,7 @@ const commands: Record<string, () => void | Promise<void>> = {
 	savepoint,
 	sha,
 	track,
+	yank,
 };
 
 /** returns true if it ran */

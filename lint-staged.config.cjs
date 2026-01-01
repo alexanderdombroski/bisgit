@@ -1,9 +1,9 @@
 module.exports = {
-	'*.ts': (stagedFiles) => [
+	'*.{ts,tsx}': (stagedFiles) => [
 		`prettier --write ${stagedFiles.join(' ')}`,
 		`eslint --max-warnings=0 ${stagedFiles.join(' ')}`,
 	],
-	'*.{js,html,css,md}': (stagedFiles) => [
+	'*.{js,html,css,md,json}': (stagedFiles) => [
 		`prettier --write ${stagedFiles.join(' ')}`,
 	],
 };

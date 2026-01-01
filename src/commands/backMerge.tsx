@@ -4,6 +4,7 @@ import {
 	commitsBehind,
 	getBranchDefaultRemote,
 	getCurrentBranch,
+	gitFetch,
 } from '../utils/git';
 import { requireBranch, requireRemote } from '../utils/guards';
 import { render } from 'ink';
@@ -51,7 +52,7 @@ export async function backmerge() {
 }
 
 export async function smartPull(remote: string, branch: string) {
-	await execAsync(`git fetch ${remote} ${branch}`);
+	await gitFetch(remote, branch);
 	const [ahead, behind, current] = await Promise.all([
 		commitsAhead(remote, branch),
 		commitsBehind(remote, branch),
