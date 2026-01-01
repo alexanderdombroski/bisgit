@@ -1,12 +1,12 @@
 import { execSync } from 'node:child_process';
 import { requireRootCommit } from '../utils/guards';
-import clipboard from 'clipboardy';
 
 /** handler for sha command */
 export async function sha() {
 	requireRootCommit();
 
 	const sha = getShortSha(process.argv[3]);
+	const { default: clipboard } = await import('clipboardy');
 	await clipboard.write(sha);
 	console.log(`'${sha}' copied to clipboard`);
 }
