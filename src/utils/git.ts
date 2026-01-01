@@ -43,6 +43,11 @@ export async function getGitConfigPath(file: string) {
 	return normalize(stdout.trim());
 }
 
+export async function getGitDir() {
+	const { stdout } = await execAsync('git rev-parse --git-dir');
+	return normalize(stdout.trim());
+}
+
 // eslint-disable-next-line no-unused-vars
 async function isValidRemote(name: string): Promise<boolean> {
 	const { code } = await spawnAsync('git', ['remote', 'get-url', name], { stdio: 'ignore' });

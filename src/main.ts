@@ -19,6 +19,7 @@ async function main() {
 
 main().catch((error) => {
 	if (typeof error === 'object') {
+		// TODO - only log generic json errors if loglevel is debug
 		error = JSON.stringify(error, undefined, 2);
 	}
 	console.error(`An error occurred: ${error}`);

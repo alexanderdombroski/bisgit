@@ -1,5 +1,7 @@
+import { abort } from './abort';
 import { amend } from './amend';
 import { backmerge } from './backMerge';
+import { continueHandler } from './continue';
 import { exclude } from './exclude';
 import { files } from './files';
 import { include } from './include';
@@ -11,8 +13,10 @@ import { track } from './track';
 import { yank } from './yank';
 
 const commands: Record<string, () => void | Promise<void>> = {
+	abort,
 	amend,
 	backmerge,
+	continue: continueHandler,
 	exclude,
 	files,
 	include,
