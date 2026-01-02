@@ -1,5 +1,6 @@
 import { abort } from './abort';
 import { amend } from './amend';
+import { autoprune } from './autoprune';
 import { backmerge } from './backMerge';
 import { churn } from './churn';
 import { coauthor } from './coauthor';
@@ -23,6 +24,7 @@ import { yank } from './yank';
 const commands: Record<string, () => void | Promise<void>> = {
   abort,
   amend,
+  autoprune,
   backmerge,
   churn,
   coauthor,

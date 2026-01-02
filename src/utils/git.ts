@@ -93,3 +93,8 @@ export async function revList(ref1: string, ref2: string, reverse?: boolean): Pr
   const { stdout } = await execAsync(`git rev-list ${reverse ? '--reverse' : ''} ${ref1}..${ref2}`);
   return stdout.trim().split(/\r?\n/);
 }
+
+export async function getBranchList(): Promise<string[]> {
+  const { stdout } = await execAsync("git for-each-ref --format='%(refname:short)' refs/heads");
+  return stdout.trim().split(/\r?\n/);
+}
