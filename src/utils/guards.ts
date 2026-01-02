@@ -59,3 +59,17 @@ export const requireUpstreamBranch = (name: string) =>
 		['rev-parse', '--abbrev-ref', '--symbolic-full-name', `${name}@{u}`],
 		`branch '${name}' has no upstream`
 	);
+
+export function requireArg(msg = 'Error: missing required argument'): string {
+	if (process.argv[3]) return process.argv[3];
+	console.error(msg);
+	process.exit(1);
+}
+
+export async function requireStaged() {
+	const { status } = spawnSync('git', ['diff', '--staged', '--quiet'], { stdio: 'ignore' });
+	if (status === 0) {
+		console.error('You have no staged changes');
+		process.exit(1);
+	}
+}

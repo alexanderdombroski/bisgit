@@ -4,6 +4,7 @@ import { backmerge } from './backMerge';
 import { continueHandler } from './continue';
 import { exclude } from './exclude';
 import { files } from './files';
+import { fixup } from './fixup';
 import { include } from './include';
 import { pwd } from './pwd';
 import { remoteDefault } from './remoteDefault';
@@ -20,6 +21,7 @@ const commands: Record<string, () => void | Promise<void>> = {
 	continue: continueHandler,
 	exclude,
 	files,
+	fixup,
 	include,
 	pwd,
 	'remote-default': remoteDefault,
