@@ -1,10 +1,10 @@
-import React, { Suspense, use } from 'react';
-import { Text } from 'ink';
+import React, { Suspense, use, useEffect } from 'react';
+import { Text, useApp } from 'ink';
 import Spinner from 'ink-spinner';
 
 type Props = {
 	msg: string;
-	promise: Promise<void>;
+	promise: Promise<void | string>;
 };
 
 export function WithProgress(props: Props) {
@@ -25,6 +25,12 @@ export function WithProgress(props: Props) {
 }
 
 function Result({ msg, promise }: Props) {
-	use(promise);
-	return <Text>{`\u2714 ${msg}`}</Text>;
+	const result = use(promise);
+
+	const { exit } = useApp();
+	useEffect(() => {
+		exit();
+	}, [result]);
+
+	return <Text>{`\u2714 ${result ?? msg}`}</Text>;
 }

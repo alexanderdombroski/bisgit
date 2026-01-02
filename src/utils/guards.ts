@@ -10,6 +10,10 @@ function requireZeroStatus(cmd: string, args: string[], errorMessage?: string) {
 	}
 }
 
+/** Exits 1 if no not git repository */
+export const requireGitRepo = () =>
+	requireZeroStatus('git', ['rev-parse', '--git-dir'], 'Need to use command in a git repository.');
+
 /** Exits 1 if no root commit */
 export const requireRootCommit = () =>
 	requireZeroStatus('git', ['rev-parse', 'HEAD'], 'Need to create first commit.');

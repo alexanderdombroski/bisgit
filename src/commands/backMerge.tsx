@@ -1,4 +1,3 @@
-import { exec } from 'node:child_process';
 import {
 	commitsAhead,
 	commitsBehind,
@@ -9,10 +8,7 @@ import {
 import { requireBranch, requireRemote } from '../utils/guards';
 import { render } from 'ink';
 import { WithProgress } from '../components/withProgress';
-import { spawnCommand, spawnGitWithColor } from '../utils/commands';
-import { promisify } from 'node:util';
-
-const execAsync = promisify(exec);
+import { execAsync, spawnCommand, spawnGitWithColor } from '../utils/commands';
 
 /** Merges `target` -> `destination` */
 export async function backmerge() {

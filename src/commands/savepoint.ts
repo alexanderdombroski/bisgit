@@ -1,9 +1,5 @@
-import { exec } from 'node:child_process';
 import { getTimestamp } from '../utils/date';
-import { promisify } from 'node:util';
-import { spawnGitWithColor } from '../utils/commands';
-
-const execAsync = promisify(exec);
+import { execAsync, spawnGitWithColor } from '../utils/commands';
 
 export async function savepoint() {
 	const timestamp = getTimestamp();

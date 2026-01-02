@@ -10,6 +10,7 @@ import { remoteDefault } from './remoteDefault';
 import { savepoint } from './savepoint';
 import { sha } from './sha';
 import { track } from './track';
+import { wipe } from './wipe';
 import { yank } from './yank';
 
 const commands: Record<string, () => void | Promise<void>> = {
@@ -25,6 +26,7 @@ const commands: Record<string, () => void | Promise<void>> = {
 	savepoint,
 	sha,
 	track,
+	wipe,
 	yank,
 };
 

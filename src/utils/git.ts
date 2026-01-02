@@ -1,9 +1,5 @@
-import { exec, type SpawnOptions } from 'node:child_process';
 import { normalize } from 'node:path';
-import { promisify } from 'node:util';
-import { spawnAsync } from './commands';
-
-const execAsync = promisify(exec);
+import { execAsync, spawnAsync } from './commands';
 
 export async function getCurrentBranch() {
 	const { stdout } = await execAsync('git branch --show-current');
@@ -68,10 +64,11 @@ export async function gitFetch(remote?: string, branch?: string) {
 }
 
 export async function isDiffClean() {
-	const opts: SpawnOptions = { stdio: 'ignore' };
-	const [res1, res2] = await Promise.all([
-		spawnAsync('git', ['diff', '--quiet'], opts),
-		spawnAsync('git', ['diff', '--cached', '--quiet'], opts),
-	]);
-	return res1.code === 0 && res2.code === 0;
+	const { stdout } = await spawnAsync('git', ['status', '--porcelain']);
+	return !stdout?.trim();
+}
+
+export async function getStatusPorcelain(): Promise<string[] | undefined> {
+	const { stdout } = await spawnAsync('git', ['status', '--porcelain']);
+	return stdout?.trim()?.split(/\r?\n/);
 }

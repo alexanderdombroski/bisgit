@@ -1,5 +1,6 @@
-import { spawn } from 'node:child_process';
+import { exec, spawn } from 'node:child_process';
 import type { SpawnOptions, StdioOptions } from 'node:child_process';
+import { promisify } from 'node:util';
 
 type Options = SpawnOptions & {
 	silent?: boolean;
@@ -23,6 +24,8 @@ export function spawnCommand(cmd: string, args: string[], options?: Options) {
 		}
 	});
 }
+
+export const execAsync = promisify(exec);
 
 export async function spawnAsync(cmd: string, args: string[], options: SpawnOptions = {}) {
 	const { promise, resolve, reject } = Promise.withResolvers<{

@@ -1,7 +1,6 @@
 import path from 'node:path';
-import { getGitConfigPath, getGitDir } from './git';
+import { getGitConfigPath, getGitDir, getStatusPorcelain } from './git';
 import { exists } from './fs';
-import { spawnAsync } from './commands';
 
 // eslint-disable-next-line no-unused-vars
 async function isMergeConflict(): Promise<boolean> {
@@ -42,9 +41,9 @@ UD File was deleted in a stash, but edited in a recent commit
 */
 
 export async function hasConflicts(): Promise<boolean> {
-	const res = await spawnAsync('git', ['status', '--porcelain']);
+	const status = await getStatusPorcelain();
 	const regex = /^(UU|DU|UD)/;
-	return !!res.stdout?.split(/\r?\n/).some((status) => regex.test(status));
+	return !!status?.some((status) => regex.test(status));
 }
 
 type ConflictTypes = {

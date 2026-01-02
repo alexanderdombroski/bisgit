@@ -1,13 +1,10 @@
 import { commitsAhead, commitsBehind, getCurrentBranch, isDiffClean } from '../utils/git';
 import { requireNotDetached, requireRemote, requireUpstreamBranch } from '../utils/guards';
-import { exec } from 'node:child_process';
-import { promisify } from 'node:util';
 import { savepoint } from './savepoint';
 import { nanoid } from 'nanoid';
 import { render } from 'ink';
 import { WithProgress } from '../components/withProgress';
-
-const execAsync = promisify(exec);
+import { execAsync } from '../utils/commands';
 
 export async function yank() {
 	await requireNotDetached();
