@@ -80,7 +80,8 @@ export async function getMergeBase(ref1: string, ref2: string) {
 export async function canMerge(from: string, into: string): Promise<boolean> {
   const base = await getMergeBase(from, into);
   const { stdout } = await spawnAsync('git', ['merge-tree', base, into, from]);
-  return !stdout?.includes('<<<<<<< .their');
+  const lines = stdout?.split(/\r?\n/);
+  return !lines?.includes('+=======');
 }
 
 export async function revParse(ref: string): Promise<string> {
