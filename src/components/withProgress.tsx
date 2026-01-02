@@ -4,7 +4,7 @@ import Spinner from 'ink-spinner';
 
 type Props = {
 	msg: string;
-	promise: Promise<void | string>;
+	promise: Promise<any>;
 };
 
 export function WithProgress(props: Props) {
@@ -32,5 +32,6 @@ function Result({ msg, promise }: Props) {
 		exit();
 	}, [result]);
 
-	return <Text>{`\u2714 ${result ?? msg}`}</Text>;
+	const completionMessage = typeof result === 'string' ? result : msg;
+	return <Text>{`\u2714 ${completionMessage}`}</Text>;
 }
