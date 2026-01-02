@@ -4,6 +4,7 @@ import { backmerge } from './backMerge';
 import { churn } from './churn';
 import { coauthor } from './coauthor';
 import { codeReview } from './codeReview';
+import { conflict } from './conflict';
 import { continueHandler } from './continue';
 import { exclude } from './exclude';
 import { files } from './files';
@@ -19,29 +20,30 @@ import { wipe } from './wipe';
 import { yank } from './yank';
 
 const commands: Record<string, () => void | Promise<void>> = {
-	abort,
-	amend,
-	backmerge,
-	churn,
-	coauthor,
-	'code-review': codeReview,
-	continue: continueHandler,
-	exclude,
-	files,
-	fixup,
-	include,
-	languages,
-	pwd,
-	'remote-default': remoteDefault,
-	savepoint,
-	sha,
-	track,
-	wipe,
-	yank,
+  abort,
+  amend,
+  backmerge,
+  churn,
+  coauthor,
+  'code-review': codeReview,
+  conflict,
+  continue: continueHandler,
+  exclude,
+  files,
+  fixup,
+  include,
+  languages,
+  pwd,
+  'remote-default': remoteDefault,
+  savepoint,
+  sha,
+  track,
+  wipe,
+  yank,
 };
 
 /** returns true if it ran */
 export async function runCommand(cmd: string): Promise<boolean | undefined> {
-	await commands[cmd]?.();
-	return Object.hasOwn(commands, cmd);
+  await commands[cmd]?.();
+  return Object.hasOwn(commands, cmd);
 }

@@ -2,72 +2,77 @@ import { normalize } from 'node:path';
 import { execAsync, spawnAsync } from './commands';
 
 export async function getCurrentBranch() {
-	const { stdout } = await execAsync('git branch --show-current');
-	return stdout.trim();
+  const { stdout } = await execAsync('git branch --show-current');
+  return stdout.trim();
 }
 
 export async function getBranchDefaultRemote(name?: string) {
-	name ??= await getCurrentBranch();
-	const { stdout } = await execAsync(`git config --get branch.${name}.remote`);
-	return stdout.trim();
+  name ??= await getCurrentBranch();
+  const { stdout } = await execAsync(`git config --get branch.${name}.remote`);
+  return stdout.trim();
 }
 
 /** @note run git fetch before comparing */
 export async function commitsAhead(remote: string, branch: string): Promise<number> {
-	try {
-		const { stdout } = await execAsync(`git rev-list --count ${remote}/${branch}..${branch}`);
-		return parseInt(stdout.trim(), 10);
-	} catch (error) {
-		console.error('Error getting commits ahead:', error);
-		return NaN;
-	}
+  try {
+    const { stdout } = await execAsync(`git rev-list --count ${remote}/${branch}..${branch}`);
+    return parseInt(stdout.trim(), 10);
+  } catch (error) {
+    console.error('Error getting commits ahead:', error);
+    return NaN;
+  }
 }
 
 /** @note run git fetch before comparing */
 export async function commitsBehind(remote: string, branch: string): Promise<number> {
-	try {
-		const { stdout } = await execAsync(`git rev-list --count ${branch}..${remote}/${branch}`);
-		return parseInt(stdout.trim(), 10);
-	} catch (error) {
-		console.error('Error getting commits behind:', error);
-		return NaN;
-	}
+  try {
+    const { stdout } = await execAsync(`git rev-list --count ${branch}..${remote}/${branch}`);
+    return parseInt(stdout.trim(), 10);
+  } catch (error) {
+    console.error('Error getting commits behind:', error);
+    return NaN;
+  }
 }
 
 export async function getGitConfigPath(file: string) {
-	const { stdout } = await execAsync(`git rev-parse --git-path ${file}`);
-	return normalize(stdout.trim());
+  const { stdout } = await execAsync(`git rev-parse --git-path ${file}`);
+  return normalize(stdout.trim());
 }
 
 export async function getGitDir() {
-	const { stdout } = await execAsync('git rev-parse --git-dir');
-	return normalize(stdout.trim());
+  const { stdout } = await execAsync('git rev-parse --git-dir');
+  return normalize(stdout.trim());
 }
 
 export async function isValidRemote(name: string): Promise<boolean> {
-	const { code } = await spawnAsync('git', ['remote', 'get-url', name], { stdio: 'ignore' });
-	return code === 0;
+  const { code } = await spawnAsync('git', ['remote', 'get-url', name], { stdio: 'ignore' });
+  return code === 0;
 }
 
 export async function isHeadDetached() {
-	const { stdout } = await execAsync('git rev-parse --abbrev-ref HEAD');
-	return stdout.trim() === 'HEAD';
+  const { stdout } = await execAsync('git rev-parse --abbrev-ref HEAD');
+  return stdout.trim() === 'HEAD';
 }
 
 export async function gitFetch(remote?: string, branch?: string) {
-	let cmd = 'git fetch';
-	if (remote) cmd += ` ${remote}`;
-	if (branch) cmd += ` ${branch}`;
+  let cmd = 'git fetch';
+  if (remote) cmd += ` ${remote}`;
+  if (branch) cmd += ` ${branch}`;
 
-	await execAsync(cmd);
+  await execAsync(cmd);
 }
 
 export async function isDiffClean() {
-	const { stdout } = await spawnAsync('git', ['status', '--porcelain']);
-	return !stdout?.trim();
+  const { stdout } = await spawnAsync('git', ['status', '--porcelain']);
+  return !stdout?.trim();
 }
 
 export async function getStatusPorcelain(): Promise<string[] | undefined> {
-	const { stdout } = await spawnAsync('git', ['status', '--porcelain']);
-	return stdout?.trim()?.split(/\r?\n/);
+  const { stdout } = await spawnAsync('git', ['status', '--porcelain']);
+  return stdout?.trim()?.split(/\r?\n/);
+}
+
+export async function getMergeBase(ref1: string, ref2: string) {
+  const { stdout } = await execAsync(`git merge-base ${ref1} ${ref2}`);
+  return stdout.trim();
 }
