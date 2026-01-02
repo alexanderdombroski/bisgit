@@ -15,6 +15,8 @@ export async function yank() {
 	const branch = await getCurrentBranch();
 	requireUpstreamBranch(branch);
 
+	let created = '';
+
 	const performYank = async () => {
 		const tasks: Promise<any>[] = [execAsync(`git fetch ${remote} ${branch} --force`)];
 		if (!(await isDiffClean())) {
@@ -34,14 +36,18 @@ export async function yank() {
 
 		if (ahead !== 0) {
 			const backup = `${branch}-${nanoid(8)}`;
-			console.info(`Created branch ${backup}`);
+			created = `Created branch ${backup}`;
 			await execAsync(`git branch ${backup}`);
 		}
 
 		await execAsync(`git reset --hard ${remote}/${branch}`);
 	};
 
-	render(
-		<WithProgress msg={`Force pull reseting ${branch} -> ${remote}`} promise={performYank()} />
-	);
+	const promise = performYank();
+	render(<WithProgress msg={`Force pull reseting ${branch} -> ${remote}`} promise={promise} />);
+
+	await promise;
+	if (created) {
+		console.info(created);
+	}
 }
