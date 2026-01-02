@@ -1,6 +1,7 @@
 import { abort } from './abort';
 import { amend } from './amend';
 import { backmerge } from './backMerge';
+import { churn } from './churn';
 import { coauthor } from './coauthor';
 import { continueHandler } from './continue';
 import { exclude } from './exclude';
@@ -20,6 +21,7 @@ const commands: Record<string, () => void | Promise<void>> = {
 	abort,
 	amend,
 	backmerge,
+	churn,
 	coauthor,
 	continue: continueHandler,
 	exclude,
