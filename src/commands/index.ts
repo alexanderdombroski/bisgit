@@ -3,6 +3,7 @@ import { amend } from './amend';
 import { backmerge } from './backMerge';
 import { churn } from './churn';
 import { coauthor } from './coauthor';
+import { codeReview } from './codeReview';
 import { continueHandler } from './continue';
 import { exclude } from './exclude';
 import { files } from './files';
@@ -23,6 +24,7 @@ const commands: Record<string, () => void | Promise<void>> = {
 	backmerge,
 	churn,
 	coauthor,
+	'code-review': codeReview,
 	continue: continueHandler,
 	exclude,
 	files,

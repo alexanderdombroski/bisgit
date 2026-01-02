@@ -44,8 +44,7 @@ export async function getGitDir() {
 	return normalize(stdout.trim());
 }
 
-// eslint-disable-next-line no-unused-vars
-async function isValidRemote(name: string): Promise<boolean> {
+export async function isValidRemote(name: string): Promise<boolean> {
 	const { code } = await spawnAsync('git', ['remote', 'get-url', name], { stdio: 'ignore' });
 	return code === 0;
 }

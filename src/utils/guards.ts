@@ -1,6 +1,6 @@
 import { spawnSync } from 'node:child_process';
 import { exists } from './fs';
-import { isHeadDetached } from './git';
+import { isDiffClean, isHeadDetached } from './git';
 
 function requireZeroStatus(cmd: string, args: string[], errorMessage?: string) {
 	const { status } = spawnSync(cmd, args, { stdio: 'ignore' });
@@ -30,10 +30,12 @@ export const requireBranch = (name: string) =>
 	);
 
 /** Exits 1 if there are untracked or staged files */
-export const requireCleanStatus = () => {
-	const msg = 'You should stash or commit your changes first.';
-	requireZeroStatus('git', ['diff', '--quiet'], msg);
-	requireZeroStatus('git', ['diff', '--cached', '--quiet'], msg);
+export const requireCleanStatus = async () => {
+	const isClean = await isDiffClean();
+	if (!isClean) {
+		console.error('You should stash or commit your changes first.');
+		process.exit(1);
+	}
 };
 
 /** Exits 1 if file doesn't exist */
