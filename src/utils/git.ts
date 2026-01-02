@@ -76,3 +76,19 @@ export async function getMergeBase(ref1: string, ref2: string) {
   const { stdout } = await execAsync(`git merge-base ${ref1} ${ref2}`);
   return stdout.trim();
 }
+
+export async function canMerge(from: string, into: string): Promise<boolean> {
+  const base = await getMergeBase(from, into);
+  const { stdout } = await spawnAsync('git', ['merge-tree', base, into, from]);
+  return !stdout?.includes('<<<<<<< .their');
+}
+
+export async function revParse(ref: string): Promise<string> {
+  const { stdout } = await execAsync(`git rev-parse ${ref}`);
+  return stdout.trim();
+}
+
+export async function revList(ref1: string, ref2: string, reverse?: boolean): Promise<string[]> {
+  const { stdout } = await execAsync(`git rev-list ${reverse ? '--reverse' : ''} ${ref1}..${ref2}`);
+  return stdout.trim().split(/\r?\n/);
+}

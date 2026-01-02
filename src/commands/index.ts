@@ -12,6 +12,7 @@ import { fixup } from './fixup';
 import { include } from './include';
 import { languages } from './languages';
 import { pwd } from './pwd';
+import { rebranch } from './rebranch';
 import { remoteDefault } from './remoteDefault';
 import { savepoint } from './savepoint';
 import { sha } from './sha';
@@ -34,6 +35,7 @@ const commands: Record<string, () => void | Promise<void>> = {
   include,
   languages,
   pwd,
+  rebranch,
   'remote-default': remoteDefault,
   savepoint,
   sha,
