@@ -1,22 +1,42 @@
-import { execSync, spawnSync } from 'node:child_process';
 import { requireRemote, requireRootCommit } from '../utils/guards';
+import { isValidRemote } from '../utils/git';
+import { execAsync, spawnAsync } from '../utils/commands';
 
-/** Returns origin/HEAD ie 'origin/main' or 'origin/master' */
-export function getRemoteDefault(): string {
+type RemoteDefault = {
+	remote: string;
+	branch: string;
+};
+
+async function getRemoteDefault(): Promise<RemoteDefault> {
 	requireRootCommit();
 	requireRemote();
 
-	const res = spawnSync('git', ['rev-parse', '--abbrev-ref', 'origin/HEAD'], { encoding: 'utf-8' });
-	if (res.status === 0) {
-		return res.stdout.trim();
+	const { stdout, code } = await spawnAsync('git', ['rev-parse', '--abbrev-ref', 'origin/HEAD']);
+
+	if (code === 0) {
+		return splitRemoteAndBranch(stdout!.trim());
 	}
 
-	execSync('git remote set-head origin -a', { stdio: 'ignore' });
-	return execSync('git rev-parse --abbrev-ref origin/HEAD', { encoding: 'utf-8' }).trim();
+	await execAsync('git remote set-head origin -a');
+
+	const { stdout: unsplit } = await execAsync('git rev-parse --abbrev-ref origin/HEAD');
+	return splitRemoteAndBranch(unsplit.trim());
 }
 
 /** Handler for remote-default */
-export function remoteDefault() {
-	const remote = getRemoteDefault();
-	console.log(`Remote default branch is '${remote}'`);
+export async function remoteDefault() {
+	const { remote, branch } = await getRemoteDefault();
+	console.log(`Remote default branch is '${remote}/${branch}'`);
+}
+
+async function splitRemoteAndBranch(input: string): Promise<RemoteDefault> {
+	const parts = input.split('/');
+	const possibleRemotes = input.split('/').map((_, i) => parts.slice(0, i + 1).join('/'));
+	for (const remote of possibleRemotes) {
+		if (await isValidRemote(remote)) {
+			const branch = input.slice(remote.length + 1);
+			return { remote, branch };
+		}
+	}
+	throw new Error('Failed to get default remote');
 }
