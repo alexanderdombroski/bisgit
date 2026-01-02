@@ -13,8 +13,16 @@
 - cli tui for git client
 - more custom git workflow commands
 - glossary command with advanced git terms
+- completions
 
-## [0.1.0] - 2025-12-31
+## [0.1.0] - 2026-01-02
+
+### Added
+
+- More commands use TUI for better UX
+- Much more commmands
+
+## [0.0.0] - 2025-12-31
 
 ### Added
 
