@@ -18,7 +18,7 @@ const App = () => {
   });
 
   return (
-    <Box flexDirection="column">
+    <Box flexDirection="column" borderStyle="round">
       <Text>👋 Welcome to the Demo Ink App!</Text>
       <Text>---------------------------------</Text>
       <Text>Count: {count}</Text>

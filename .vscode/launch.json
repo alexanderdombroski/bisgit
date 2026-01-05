@@ -1,0 +1,10 @@
+{
+    "configurations": [
+        {
+            "name": "Launch Tui",
+            "request": "launch",
+            "type": "node",
+            "preLaunchTask": "${defaultBuildTask}",
+        },
+    ]
+}

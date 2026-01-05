@@ -29,13 +29,13 @@
   "type": "module",
   "scripts": {
     "start": "node dist/main.js",
-    "dev": "node esbuild.mjs && node dist/main.js",
+    "dev": "node --watch dist/main.js",
+    "gi": "npm run package && node dist/main.js",
     "build": "node esbuild.mjs --watch",
     "package": "rm -rf dist && node esbuild.mjs --production",
     "profile": "npm-run-all -p profile:*",
     "profile:size": "esbuild-visualizer --metadata ./profile/meta.json --filename ./profile/visualizer.html && open ./profile/visualizer.html",
     "profile:lazy": "esbuild-lazy-analyzer --metafile ./profile/meta.json --outmeta ./profile/lazy.json --outreport ./profile/lazy.html && open ./profile/lazy.html",
-    "gi": "npm run package && node dist/main.js",
     "lint": "eslint src",
     "check-types": "tsc --noEmit",
     "prepare": "husky"

@@ -1,6 +1,9 @@
 # System
 .DS_Store
-.vscode
+.vscode/**
+!.vscode/extensions.json
+!.vscode/launch.json
+!.vscode/tasks.json
 
 # Logs
 logs
