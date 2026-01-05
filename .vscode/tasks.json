@@ -3,7 +3,7 @@
   "tasks": [
     {
       "label": "Tui",
-      "dependsOn": ["npm dev", "npm build"],
+      "dependsOn": ["npm build", "npm dev"],
       "icon": {
         "id": "git-branch"
       },
@@ -33,7 +33,6 @@
         },
       },
       "presentation": {
-        "group": "watch",
         "reveal": "always",
         "focus": true,
         "panel": "shared",
@@ -48,7 +47,6 @@
       "isBackground": true,
       "problemMatcher": "$esbuild-watch",
       "presentation": {
-        "group": "watch",
         "panel": "shared",
       }
     }
