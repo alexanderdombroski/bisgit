@@ -17,7 +17,14 @@ export function Section(props: SectionProps) {
       {title && (
         <Text>{'╭────' + title + '─'.repeat(stdout.columns - title.length - 6) + '╮'}</Text>
       )}
-      <Box flexDirection="column" {...props} borderTop={!title} borderBottom={!footer}>
+      <Box
+        flexDirection="column"
+        {...props}
+        borderStyle="round"
+        borderTop={!title}
+        borderBottom={!footer}
+        paddingLeft={1}
+      >
         {children}
       </Box>
       {footer && (

@@ -3,7 +3,7 @@ import { getCommand } from './utils/args';
 async function main() {
   const cmd = getCommand();
   if (!cmd) {
-    const { renderApp } = await import('./components/index.jsx');
+    const { renderApp } = await import('./pages/index.jsx');
     return renderApp();
   }
 

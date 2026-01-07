@@ -1,7 +1,21 @@
-import { useEffect } from 'react';
+import { lazy, Suspense, useEffect } from 'react';
 import { Text, Box, useInput } from 'ink';
-import { KeybindingsProvider, useKeybindings } from './hooks/useKeybindings';
-import { Section } from './section';
+import { KeybindingsProvider, useKeybindings } from '../components/hooks/useKeybindings';
+import { Section } from '../components/section';
+import Spinner from 'ink-spinner';
+
+const Status = lazy(() => import('./status'));
+
+function Fallback() {
+  return (
+    <Section>
+      <Text>
+        <Spinner />
+        &nbsp;Loading
+      </Text>
+    </Section>
+  );
+}
 
 export function App() {
   // eslint-disable-next-line no-unused-vars
@@ -17,12 +31,9 @@ export function App() {
   return (
     <KeybindingsProvider>
       <Box flexDirection="column">
-        <Section flexDirection="column" borderStyle="round" title="Bisgit" paddingLeft={1}>
-          <Text>Git information in here</Text>
-          <Text>Logs</Text>
-          <Text>Branches</Text>
-          <Text>Stash</Text>
-        </Section>
+        <Suspense fallback={<Fallback />}>
+          <Status />
+        </Suspense>
         <Section flexDirection="row" borderStyle="round" title="Key Shortcuts">
           {Object.entries(keybindings).map(([key, action]) => (
             <Text key={action}>{`[${key}]: ${action}`}</Text>
