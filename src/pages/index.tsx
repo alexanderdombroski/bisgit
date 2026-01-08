@@ -10,4 +10,4 @@ function Root() {
   );
 }
 
-export const renderApp = () => render(<Root />);
+export const renderApp = () => render(<Root />, { patchConsole: true });

@@ -4,7 +4,8 @@ import { KeybindingsProvider, useKeybindings } from '../components/hooks/useKeyb
 import { Section } from '../components/section';
 import Spinner from 'ink-spinner';
 
-const Status = lazy(() => import('./status'));
+const Log = lazy(() => import('./log'));
+// const Status = lazy(() => import('./status'));
 
 function Fallback() {
   return (
@@ -32,7 +33,7 @@ export function App() {
     <KeybindingsProvider>
       <Box flexDirection="column">
         <Suspense fallback={<Fallback />}>
-          <Status />
+          <Log />
         </Suspense>
         <Section flexDirection="row" borderStyle="round" title="Key Shortcuts">
           {Object.entries(keybindings).map(([key, action]) => (
