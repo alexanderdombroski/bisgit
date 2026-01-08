@@ -1,5 +1,6 @@
-import { Box, type BoxProps, Text, useStdout } from 'ink';
+import { Box, type BoxProps, Text } from 'ink';
 import type { ReactNode } from 'react';
+import { useDimensions } from './hooks/useDimensions';
 
 interface SectionProps extends BoxProps {
   children: ReactNode;
@@ -9,14 +10,11 @@ interface SectionProps extends BoxProps {
 
 export function Section(props: SectionProps) {
   const { title, footer, children } = props;
-
-  const { stdout } = useStdout();
+  const { width } = useDimensions();
 
   return (
     <Box flexDirection="column">
-      {title && (
-        <Text>{'╭────' + title + '─'.repeat(stdout.columns - title.length - 6) + '╮'}</Text>
-      )}
+      {title && <Text>{'╭────' + title + '─'.repeat(width - title.length - 6) + '╮'}</Text>}
       <Box
         flexDirection="column"
         {...props}
@@ -27,9 +25,7 @@ export function Section(props: SectionProps) {
       >
         {children}
       </Box>
-      {footer && (
-        <Text>{'╰' + '─'.repeat(stdout.columns - footer.length - 6) + footer + '────╯'}</Text>
-      )}
+      {footer && <Text>{'╰' + '─'.repeat(width - footer.length - 6) + footer + '────╯'}</Text>}
     </Box>
   );
 }
