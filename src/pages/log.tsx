@@ -5,17 +5,23 @@ import { Box, Text, useInput } from 'ink';
 import { useDimensions } from '../components/hooks/useDimensions';
 import { useScrollable } from '../components/hooks/useScrollable';
 
-const promise = (async () => {
+const logPromise = (async () => {
   const { stdout } = await execAsync('git log --oneline -n 30');
   const lines = stdout.trim().split(/\r?\n/);
   return lines.map(splitLogEntry);
 })();
+const commitPromise = (async () => {
+  const { stdout } = await execAsync(`git show HEAD --name-only`);
+  return stdout.trim();
+})();
 
 export default function Log() {
-  const { height } = useDimensions();
+  const { height, width } = useDimensions();
   const sectionHeight = height - 5;
+  const sectionWidth = Math.floor(width / 2);
 
-  const items = use(promise);
+  const items = use(logPromise);
+
   const {
     scrollUp,
     scrollDown,
@@ -33,16 +39,29 @@ export default function Log() {
     }
   });
 
+  const details = use(commitPromise);
+
   return (
-    <Section overflowY="hidden" height={sectionHeight}>
-      {logItems.map(({ sha, message }) => (
-        <Box key={sha} flexDirection="row">
-          {sha === selectedValue.sha ? <Text>{'> '}</Text> : <Text>{'  '}</Text>}
-          <Text color="yellow">{sha}&nbsp;</Text>
-          <Text>{message}</Text>
-        </Box>
-      ))}
-    </Section>
+    <>
+      <Box>
+        <Section overflowY="hidden" height={sectionHeight} title="Log" width={sectionWidth}>
+          {logItems.map(({ sha, message }) => (
+            <Box key={sha} flexDirection="row" flexWrap="nowrap">
+              <Box minWidth={2}>{sha === selectedValue.sha ? <Text>{'> '}</Text> : null}</Box>
+              <Box minWidth={8}>
+                <Text color="yellow">{sha}</Text>
+              </Box>
+              <Box>
+                <Text wrap="truncate-end">{message}</Text>
+              </Box>
+            </Box>
+          ))}
+        </Section>
+        <Section title="Commit Details" width={sectionWidth}>
+          <Text>{details}</Text>
+        </Section>
+      </Box>
+    </>
   );
 }
 

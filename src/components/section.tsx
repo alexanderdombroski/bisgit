@@ -6,15 +6,21 @@ interface SectionProps extends BoxProps {
   children: ReactNode;
   title?: string;
   footer?: string;
+  /** The number of sections per width */
+  width?: number;
 }
 
 export function Section(props: SectionProps) {
-  const { title, footer, children } = props;
+  const { title, footer, children, width: inputWidth } = props;
   const { width } = useDimensions();
+  const sectionWidth = inputWidth ?? width;
+  const middleBorderLength = sectionWidth - 6;
 
   return (
     <Box flexDirection="column">
-      {title && <Text>{'╭────' + title + '─'.repeat(width - title.length - 6) + '╮'}</Text>}
+      {title && (
+        <Text>{'╭────' + title + '─'.repeat(middleBorderLength - title.length) + '╮'}</Text>
+      )}
       <Box
         flexDirection="column"
         {...props}
@@ -25,7 +31,9 @@ export function Section(props: SectionProps) {
       >
         {children}
       </Box>
-      {footer && <Text>{'╰' + '─'.repeat(width - footer.length - 6) + footer + '────╯'}</Text>}
+      {footer && (
+        <Text>{'╰' + '─'.repeat(middleBorderLength - footer.length) + footer + '────╯'}</Text>
+      )}
     </Box>
   );
 }
