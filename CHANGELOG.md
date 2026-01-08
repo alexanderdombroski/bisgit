@@ -15,6 +15,13 @@
 - glossary command with advanced git terms
 - completions
 
+## [0.2.0] - 2026-01-08
+
+### Added
+
+- Log and Status Page for main TUI
+- Starter Interactivity
+
 ## [0.1.0] - 2026-01-02
 
 ### Added
