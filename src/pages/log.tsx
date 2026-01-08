@@ -1,8 +1,9 @@
-import { use, useState } from 'react';
+import { use } from 'react';
 import { execAsync } from '../utils/commands';
 import { Section } from '../components/section';
 import { Box, Text, useInput } from 'ink';
 import { useDimensions } from '../components/hooks/useDimensions';
+import { useScrollable } from '../components/hooks/useScrollable';
 
 const promise = (async () => {
   const { stdout } = await execAsync('git log --oneline -n 30');
@@ -11,27 +12,32 @@ const promise = (async () => {
 })();
 
 export default function Log() {
-  const items = use(promise);
-
-  const [offset, setOffset] = useState(0);
   const { height } = useDimensions();
-  const SECTION_HEIGHT = height - 5;
+  const sectionHeight = height - 5;
+
+  const items = use(promise);
+  const {
+    scrollUp,
+    scrollDown,
+    outList: logItems,
+    selectedValue,
+  } = useScrollable(items, sectionHeight - 2);
+
   useInput((input, key) => {
     if (key.upArrow) {
-      setOffset((o) => Math.max(0, o - 1));
+      scrollUp();
     }
 
     if (key.downArrow) {
-      setOffset((o) => Math.min(items.length - height, o + 1));
+      scrollDown();
     }
   });
 
-  const visibleLines = items.slice(offset, offset + height);
-
   return (
-    <Section overflowY="hidden" height={SECTION_HEIGHT}>
-      {visibleLines.map(({ sha, message }) => (
+    <Section overflowY="hidden" height={sectionHeight}>
+      {logItems.map(({ sha, message }) => (
         <Box key={sha} flexDirection="row">
+          {sha === selectedValue.sha ? <Text>{'> '}</Text> : <Text>{'  '}</Text>}
           <Text color="yellow">{sha}&nbsp;</Text>
           <Text>{message}</Text>
         </Box>
