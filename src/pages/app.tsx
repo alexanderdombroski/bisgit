@@ -2,21 +2,10 @@ import { lazy, Suspense, useEffect } from 'react';
 import { Text, Box, useInput } from 'ink';
 import { KeybindingsProvider, useKeybindings } from '../components/hooks/useKeybindings';
 import { Section } from '../components/section';
-import Spinner from 'ink-spinner';
+import { Fallback } from '../components/fallback';
 
 const Log = lazy(() => import('./log'));
 // const Status = lazy(() => import('./status'));
-
-function Fallback() {
-  return (
-    <Section>
-      <Text>
-        <Spinner />
-        &nbsp;Loading
-      </Text>
-    </Section>
-  );
-}
 
 export function App() {
   // eslint-disable-next-line no-unused-vars

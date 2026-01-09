@@ -1,19 +1,21 @@
-import { use } from 'react';
+import { use, Suspense } from 'react';
 import { execAsync } from '../utils/commands';
 import { Section } from '../components/section';
 import { Box, Text, useInput } from 'ink';
 import { useDimensions } from '../components/hooks/useDimensions';
 import { useScrollable } from '../components/hooks/useScrollable';
+import { Fallback } from '../components/fallback';
 
 const logPromise = (async () => {
   const { stdout } = await execAsync('git log --oneline -n 30');
   const lines = stdout.trim().split(/\r?\n/);
   return lines.map(splitLogEntry);
 })();
-const commitPromise = (async () => {
-  const { stdout } = await execAsync(`git show HEAD --name-only`);
+
+async function commitDetails(ref: string) {
+  const { stdout } = await execAsync(`git show ${ref} --name-only`);
   return stdout.trim();
-})();
+}
 
 export default function Log() {
   const { height, width } = useDimensions();
@@ -39,8 +41,6 @@ export default function Log() {
     }
   });
 
-  const details = use(commitPromise);
-
   return (
     <>
       <Box>
@@ -57,11 +57,29 @@ export default function Log() {
             </Box>
           ))}
         </Section>
-        <Section title="Commit Details" width={sectionWidth}>
-          <Text>{details}</Text>
-        </Section>
+        <Suspense fallback={<Fallback />}>
+          <CommitDetails
+            commitPromise={commitDetails(selectedValue.sha)}
+            sectionWidth={sectionWidth}
+          />
+        </Suspense>
       </Box>
     </>
+  );
+}
+
+function CommitDetails({
+  sectionWidth,
+  commitPromise,
+}: {
+  sectionWidth: number;
+  commitPromise: Promise<string>;
+}) {
+  const details = use(commitPromise);
+  return (
+    <Section title="Commit Details" width={sectionWidth}>
+      <Text>{details}</Text>
+    </Section>
   );
 }
 
