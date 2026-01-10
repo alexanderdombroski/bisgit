@@ -1,6 +1,6 @@
 import { lazy, Suspense, useEffect } from 'react';
 import { Text, Box, useInput } from 'ink';
-import { KeybindingsProvider, useKeybindings } from '../components/hooks/useKeybindings';
+import { useKeybindings } from '../components/hooks/useKeybindings';
 import { Section } from '../components/section';
 import { Fallback } from '../components/fallback';
 
@@ -19,17 +19,15 @@ export function App() {
   useEffect(() => setKeybinding('q', 'quit'), []);
 
   return (
-    <KeybindingsProvider>
-      <Box flexDirection="column">
-        <Suspense fallback={<Fallback />}>
-          <Log />
-        </Suspense>
-        <Section flexDirection="row" borderStyle="round" title="Key Shortcuts">
-          {Object.entries(keybindings).map(([key, action]) => (
-            <Text key={action}>{`[${key}]: ${action}`}</Text>
-          ))}
-        </Section>
-      </Box>
-    </KeybindingsProvider>
+    <Box flexDirection="column">
+      <Suspense fallback={<Fallback />}>
+        <Log />
+      </Suspense>
+      <Section flexDirection="row" borderStyle="round" title="Key Shortcuts">
+        {Object.entries(keybindings).map(([key, action]) => (
+          <Text key={action}>{`[${key}]: ${action} `}</Text>
+        ))}
+      </Section>
+    </Box>
   );
 }

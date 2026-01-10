@@ -1,10 +1,10 @@
 import { Text } from 'ink';
 import Spinner from 'ink-spinner';
-import { Section } from './section';
+import { Section, type SectionProps } from './section';
 
-export function Fallback() {
+export function Fallback(props: Omit<SectionProps, 'children'> = {}) {
   return (
-    <Section>
+    <Section {...props}>
       <Text>
         <Spinner />
         &nbsp;Loading

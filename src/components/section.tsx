@@ -2,7 +2,7 @@ import { Box, type BoxProps, Text } from 'ink';
 import type { ReactNode } from 'react';
 import { useDimensions } from './hooks/useDimensions';
 
-interface SectionProps extends BoxProps {
+export interface SectionProps extends BoxProps {
   children: ReactNode;
   title?: string;
   footer?: string;

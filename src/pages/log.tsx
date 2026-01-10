@@ -1,10 +1,11 @@
-import { use, Suspense } from 'react';
+import { use, Suspense, useEffect } from 'react';
 import { execAsync } from '../utils/commands';
 import { Section } from '../components/section';
 import { Box, Text, useInput } from 'ink';
 import { useDimensions } from '../components/hooks/useDimensions';
 import { useScrollable } from '../components/hooks/useScrollable';
 import { Fallback } from '../components/fallback';
+import { useKeybindings } from '../components/hooks/useKeybindings';
 
 const logPromise = (async () => {
   const { stdout } = await execAsync('git log --oneline -n 30');
@@ -39,7 +40,14 @@ export default function Log() {
     if (key.downArrow) {
       scrollDown();
     }
+
+    if (input === 'c') {
+      execAsync(`git checkout ${selectedValue.sha}`);
+    }
   });
+
+  const { setKeybinding } = useKeybindings();
+  useEffect(() => setKeybinding('c', 'checkout'), []);
 
   return (
     <>
@@ -57,7 +65,7 @@ export default function Log() {
             </Box>
           ))}
         </Section>
-        <Suspense fallback={<Fallback />}>
+        <Suspense fallback={<Fallback title="Commit Details" width={sectionWidth} />}>
           <CommitDetails
             commitPromise={commitDetails(selectedValue.sha)}
             sectionWidth={sectionWidth}
