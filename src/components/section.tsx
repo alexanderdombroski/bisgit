@@ -6,7 +6,6 @@ export interface SectionProps extends BoxProps {
   children: ReactNode;
   title?: string;
   footer?: string;
-  /** The number of sections per width */
   width?: number;
 }
 

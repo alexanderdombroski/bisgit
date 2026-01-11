@@ -85,7 +85,7 @@ function CommitDetails({
 }) {
   const details = use(commitPromise);
   return (
-    <Section title="Commit Details" width={sectionWidth}>
+    <Section title="Commit Details" width={sectionWidth} height="100%">
       <Text>{details}</Text>
     </Section>
   );
