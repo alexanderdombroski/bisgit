@@ -1,8 +1,6 @@
-import { lazy, Suspense, useEffect } from 'react';
+import { lazy, useEffect } from 'react';
 import { Text, Box, useInput } from 'ink';
 import { useKeybindings } from '../components/hooks/useKeybindings';
-import { Section } from '../components/section';
-import { Fallback } from '../components/fallback';
 import { useDimensions } from '../components/hooks/useDimensions';
 
 const Log = lazy(() => import('./log'));
@@ -23,14 +21,12 @@ export function App() {
 
   return (
     <Box flexDirection="column" {...deminsions}>
-      <Suspense fallback={<Fallback />}>
-        <Log />
-      </Suspense>
-      <Section flexDirection="row" borderStyle="round" title="Key Shortcuts" width="50%">
+      <Log />
+      <Box flexDirection="row">
         {Object.entries(keybindings).map(([key, action]) => (
           <Text key={action}>{`[${key}]: ${action} `}</Text>
         ))}
-      </Section>
+      </Box>
     </Box>
   );
 }

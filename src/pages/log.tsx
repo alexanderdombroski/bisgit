@@ -1,19 +1,21 @@
-import { use, Suspense, useEffect } from 'react';
+import { useEffect } from 'react';
 import { execAsync } from '../utils/commands';
 import { Section } from '../components/section';
 import { Box, Text, useInput } from 'ink';
 import { useDimensions } from '../components/hooks/useDimensions';
 import { useScrollable } from '../components/hooks/useScrollable';
-import { Fallback } from '../components/fallback';
 import { useKeybindings } from '../components/hooks/useKeybindings';
+import { useResolved } from '../components/hooks/useResolved';
+import Spinner from 'ink-spinner';
 
-const logPromise = (async () => {
+async function getLog() {
   const { stdout } = await execAsync('git log --oneline -n 30');
   const lines = stdout.trim().split(/\r?\n/);
   return lines.map(splitLogEntry);
-})();
+}
 
-async function commitDetails(ref: string) {
+async function commitDetails(ref?: string) {
+  if (!ref) return;
   const { stdout } = await execAsync(`git show ${ref} --name-only`);
   return stdout.trim();
 }
@@ -21,9 +23,8 @@ async function commitDetails(ref: string) {
 export default function Log() {
   const { height, width } = useDimensions();
   const sectionHeight = height - 5;
-  const sectionWidth = Math.floor(width / 2);
 
-  const items = use(logPromise);
+  const { resolved, value: items = [] } = useResolved(getLog);
 
   const {
     scrollUp,
@@ -51,42 +52,37 @@ export default function Log() {
 
   return (
     <>
-      <Box>
-        <Section overflowY="hidden" height={sectionHeight} title="Log" width={sectionWidth}>
-          {logItems.map(({ sha, message }) => (
-            <Box key={sha} flexDirection="row" flexWrap="nowrap">
-              <Box minWidth={2}>{sha === selectedValue.sha ? <Text>{'> '}</Text> : null}</Box>
-              <Box minWidth={8}>
-                <Text color="yellow">{sha}</Text>
-              </Box>
-              <Box>
-                <Text wrap="truncate-end">{message}</Text>
-              </Box>
-            </Box>
-          ))}
+      <Box width={width}>
+        <Section overflowY="hidden" height={sectionHeight} title="Log" width="50%">
+          {resolved ? (
+            <>
+              {logItems.map(({ sha, message }) => (
+                <Box key={sha} flexDirection="row" flexWrap="nowrap">
+                  <Box minWidth={2}>{sha === selectedValue.sha ? <Text>{'> '}</Text> : null}</Box>
+                  <Box minWidth={8}>
+                    <Text color="yellow">{sha}</Text>
+                  </Box>
+                  <Box>
+                    <Text wrap="truncate-end">{message}</Text>
+                  </Box>
+                </Box>
+              ))}
+            </>
+          ) : (
+            <Spinner />
+          )}
         </Section>
-        <Suspense fallback={<Fallback title="Commit Details" width={sectionWidth} />}>
-          <CommitDetails
-            commitPromise={commitDetails(selectedValue.sha)}
-            sectionWidth={sectionWidth}
-          />
-        </Suspense>
+        <CommitDetails sha={selectedValue?.sha} />
       </Box>
     </>
   );
 }
 
-function CommitDetails({
-  sectionWidth,
-  commitPromise,
-}: {
-  sectionWidth: number;
-  commitPromise: Promise<string>;
-}) {
-  const details = use(commitPromise);
+function CommitDetails({ sha }: { sha?: string }) {
+  const { resolved, value } = useResolved(() => commitDetails(sha), [sha]);
   return (
-    <Section title="Commit Details" width={sectionWidth} height="100%">
-      <Text>{details}</Text>
+    <Section title="Commit Details" width="50%" height="100%">
+      {sha && resolved ? <Text>{value}</Text> : <Spinner />}
     </Section>
   );
 }

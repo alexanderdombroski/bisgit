@@ -1,18 +1,14 @@
-import { use } from 'react';
 import { Section } from '../components/section';
 import { Text } from 'ink';
 import { getStatusPorcelain } from '../utils/git';
-
-const promise = getStatusPorcelain();
+import { useResolved } from '../components/hooks/useResolved';
 
 export default function Status() {
-  const status = use(promise);
+  const { value: status, resolved } = useResolved(getStatusPorcelain);
 
   return (
-    <Section flexDirection="column" title="Bisgit">
-      {status?.map((line, i) => (
-        <Text key={i}>{line}</Text>
-      ))}
+    <Section flexDirection="column" title="Bisgit" width="100%">
+      {resolved && status?.map((line, i) => <Text key={i}>{line}</Text>)}
     </Section>
   );
 }

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 type ScrollableListControls<T> = {
   scrollUp: () => void;
@@ -11,6 +11,11 @@ type ScrollableListControls<T> = {
 export function useScrollable<T>(items: T[], outputLength: number): ScrollableListControls<T> {
   const [offset, setOffset] = useState(0);
   const [selectedIndex, setSelectedIndex] = useState(0);
+
+  useEffect(() => {
+    setOffset(0);
+    setSelectedIndex(0);
+  }, [items]);
 
   const maxOffset = Math.max(0, items.length - outputLength);
   const maxIndex = items.length - 1;
