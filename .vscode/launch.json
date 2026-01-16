@@ -1,10 +1,13 @@
 {
-    "configurations": [
-        {
-            "name": "Launch Tui",
-            "request": "launch",
-            "type": "node",
-            "preLaunchTask": "${defaultBuildTask}",
-        },
-    ]
+  "configurations": [
+    {
+      "name": "Debug Tui",
+      "cwd": "${workspaceFolder}",
+      "request": "launch",
+      "type": "node",
+      "preLaunchTask": "${defaultBuildTask}",
+      "console": "integratedTerminal",
+      "args": ["--watch", "dist/main.js"]
+    }
+  ]
 }
