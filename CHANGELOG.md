@@ -15,6 +15,14 @@
 - glossary command with advanced git terms
 - completions
 
+## [0.3.0] - 2026-01-16
+
+### Added
+
+- Navigation for pages
+- Checkout commits on log page
+- Application design to make it feasible to add more TUI sections
+
 ## [0.2.0] - 2026-01-08
 
 ### Added
