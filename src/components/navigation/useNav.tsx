@@ -4,6 +4,9 @@ export const sections = {
   Status: 'Status',
   Log: 'Log',
   'Commit Details': 'Log',
+  Branches: 'Branches',
+  Worktrees: 'Branches',
+  Remotes: 'Branches',
 } as const;
 
 const _sectionsNames = Object.keys(sections) as Section[];
@@ -40,7 +43,7 @@ export function NavProvider({ children }: PropsWithChildren) {
       const newSection = _sectionsNames.at(
         (_sectionsNames.indexOf(prev) + 1) % _sectionsNames.length
       ) as Section;
-      setActiveGroup(sections[newSection]);
+      _setActiveGroup(sections[newSection]);
       return newSection;
     });
   };
@@ -48,7 +51,7 @@ export function NavProvider({ children }: PropsWithChildren) {
   const prevSection = () => {
     _setActiveSection((prev) => {
       const newSection = _sectionsNames.at(_sectionsNames.indexOf(prev) - 1) as Section;
-      setActiveGroup(sections[newSection]);
+      _setActiveGroup(sections[newSection]);
       return newSection;
     });
   };

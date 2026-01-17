@@ -19,6 +19,8 @@
 
 ### Added
 
+- Branch page with branches, worktrees, and remotes
+
 ### Fixed
 
 - Removed section top line breaks

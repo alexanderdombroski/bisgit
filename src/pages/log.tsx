@@ -22,8 +22,7 @@ async function commitDetails(ref?: string) {
 }
 
 export default function Log() {
-  const { height, width } = useDimensions();
-  const sectionHeight = height - 5;
+  const { width, sectionHeight } = useDimensions();
 
   const { resolved, value: items = [] } = useResolved(getLog);
 
