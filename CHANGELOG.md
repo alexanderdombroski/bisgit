@@ -15,6 +15,14 @@
 - glossary command with advanced git terms
 - completions
 
+## [0.4.0] - unreleased
+
+### Added
+
+### Fixed
+
+- Removed section top line breaks
+
 ## [0.3.0] - 2026-01-16
 
 ### Added

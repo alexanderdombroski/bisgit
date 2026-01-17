@@ -32,7 +32,7 @@ export function Section(props: SectionProps) {
       {targetWidth !== 0 && (
         <>
           {title && (
-            <Text color={color}>
+            <Text color={color} wrap="truncate-end">
               {'╭──── ' + title + ' ' + '─'.repeat(middleBorderLength - title.length) + '╮'}
             </Text>
           )}
@@ -48,7 +48,7 @@ export function Section(props: SectionProps) {
             {children}
           </Box>
           {footer && (
-            <Text color={color}>
+            <Text color={color} wrap="truncate-end">
               {'╰' + '─'.repeat(middleBorderLength - footer.length) + ' ' + footer + ' ────╯'}
             </Text>
           )}
