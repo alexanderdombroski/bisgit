@@ -20,25 +20,35 @@ type NavContextValue = {
   setActiveSection: (section: Section) => void;
   prevSection: () => void;
   nextSection: () => void;
+  isLocked: Boolean;
+  lock: () => void;
+  unlock: () => void;
 };
 
 const NavContext = createContext<NavContextValue>({} as NavContextValue);
 
 export function NavProvider({ children }: PropsWithChildren) {
+  const [isLocked, setIsLocked] = useState(false);
+  const lock = () => setIsLocked(true);
+  const unlock = () => setIsLocked(false);
+
   const [activeGroup, _setActiveGroup] = useState<SectionGroup>('Status');
   const [activeSection, _setActiveSection] = useState<Section>('Status');
 
   const setActiveSection = (section: Section) => {
+    if (isLocked) return;
     _setActiveSection(section);
     _setActiveGroup(sections[section]);
   };
 
   const setActiveGroup = (group: SectionGroup) => {
+    if (isLocked) return;
     _setActiveGroup(group);
     _setActiveSection(group);
   };
 
   const nextSection = () => {
+    if (isLocked) return;
     _setActiveSection((prev) => {
       const newSection = _sectionsNames.at(
         (_sectionsNames.indexOf(prev) + 1) % _sectionsNames.length
@@ -49,6 +59,7 @@ export function NavProvider({ children }: PropsWithChildren) {
   };
 
   const prevSection = () => {
+    if (isLocked) return;
     _setActiveSection((prev) => {
       const newSection = _sectionsNames.at(_sectionsNames.indexOf(prev) - 1) as Section;
       _setActiveGroup(sections[newSection]);
@@ -65,6 +76,9 @@ export function NavProvider({ children }: PropsWithChildren) {
         setActiveSection,
         prevSection,
         nextSection,
+        isLocked,
+        lock,
+        unlock,
       }}
     >
       {children}

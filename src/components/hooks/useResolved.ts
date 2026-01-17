@@ -9,9 +9,11 @@ import { useEffect, useState } from 'react';
 export function useResolved<T>(
   asyncFn: () => Promise<T>,
   deps: any[] = []
-): { value: T | undefined; resolved: boolean } {
+): { value: T | undefined; resolved: boolean; refresh: () => void } {
   const [value, setValue] = useState<T | undefined>(undefined);
   const [resolved, setResolved] = useState(false);
+  const [version, setVersion] = useState(0);
+  const refresh = () => setVersion((v) => v + 1);
 
   useEffect(() => {
     let cancelled = false;
@@ -35,7 +37,7 @@ export function useResolved<T>(
     return () => {
       cancelled = true;
     };
-  }, deps);
+  }, [version, ...deps]);
 
-  return { value, resolved };
+  return { value, resolved, refresh };
 }
