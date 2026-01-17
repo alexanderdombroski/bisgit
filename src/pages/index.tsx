@@ -1,12 +1,15 @@
 import { render } from 'ink';
 import { KeybindingsProvider } from '../components/hooks/useKeybindings';
 import { App } from './app';
+import { NavProvider } from '../components/navigation/useNav';
 
 function Root() {
   return (
-    <KeybindingsProvider>
-      <App />
-    </KeybindingsProvider>
+    <NavProvider>
+      <KeybindingsProvider>
+        <App />
+      </KeybindingsProvider>
+    </NavProvider>
   );
 }
 

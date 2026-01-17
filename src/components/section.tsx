@@ -1,6 +1,7 @@
 import { Box, type BoxProps, measureElement, Text } from 'ink';
 import { useMemo, useRef, type ReactNode } from 'react';
 import { useDimensions } from './hooks/useDimensions';
+import { useNav } from './navigation';
 
 export interface SectionProps extends BoxProps {
   children: ReactNode;
@@ -23,13 +24,15 @@ export function Section(props: SectionProps) {
   const middleBorderLength = targetWidth - 8;
 
   const innerBoxProps = { ...props, height: innerHeight, width: targetWidth };
+  const { activeSection } = useNav();
+  const color = activeSection === title ? 'cyan' : '';
 
   return (
     <Box ref={ref} flexDirection="column" height={height} width={sectionWidth}>
       {targetWidth !== 0 && (
         <>
           {title && (
-            <Text wrap="truncate-end">
+            <Text color={color}>
               {'╭──── ' + title + ' ' + '─'.repeat(middleBorderLength - title.length) + '╮'}
             </Text>
           )}
@@ -37,6 +40,7 @@ export function Section(props: SectionProps) {
             flexDirection="column"
             {...innerBoxProps}
             borderStyle="round"
+            borderColor={color}
             borderTop={!title}
             borderBottom={!footer}
             paddingLeft={1}
@@ -44,7 +48,7 @@ export function Section(props: SectionProps) {
             {children}
           </Box>
           {footer && (
-            <Text>
+            <Text color={color}>
               {'╰' + '─'.repeat(middleBorderLength - footer.length) + ' ' + footer + ' ────╯'}
             </Text>
           )}

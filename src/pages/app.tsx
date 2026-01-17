@@ -2,15 +2,25 @@ import { lazy, useEffect } from 'react';
 import { Text, Box, useInput } from 'ink';
 import { useKeybindings } from '../components/hooks/useKeybindings';
 import { useDimensions } from '../components/hooks/useDimensions';
+import { NavigationHeader, useNav } from '../components/navigation';
 
+const Status = lazy(() => import('./status'));
 const Log = lazy(() => import('./log'));
-// const Status = lazy(() => import('./status'));
 
 export function App() {
-  // eslint-disable-next-line no-unused-vars
+  const { prevSection, nextSection, activeGroup, setActiveGroup } = useNav();
+
   useInput((input, key) => {
-    if (input === 'q') {
+    if (key.tab && key.shift) {
+      prevSection();
+    } else if (key.tab) {
+      nextSection();
+    } else if (input.toLowerCase() === 'q') {
       process.exit();
+    } else if (input === '1') {
+      setActiveGroup('Status');
+    } else if (input === '2') {
+      setActiveGroup('Log');
     }
   });
 
@@ -21,7 +31,9 @@ export function App() {
 
   return (
     <Box flexDirection="column" {...deminsions}>
-      <Log />
+      <NavigationHeader />
+      {activeGroup === 'Log' && <Log />}
+      {activeGroup === 'Status' && <Status />}
       <Box flexDirection="row">
         {Object.entries(keybindings).map(([key, action]) => (
           <Text key={action}>{`[${key}]: ${action} `}</Text>

@@ -7,6 +7,7 @@ import { useScrollable } from '../components/hooks/useScrollable';
 import { useKeybindings } from '../components/hooks/useKeybindings';
 import { useResolved } from '../components/hooks/useResolved';
 import Spinner from 'ink-spinner';
+import { useNav } from '../components/navigation';
 
 async function getLog() {
   const { stdout } = await execAsync('git log --oneline -n 30');
@@ -47,8 +48,16 @@ export default function Log() {
     }
   });
 
-  const { setKeybinding } = useKeybindings();
-  useEffect(() => setKeybinding('c', 'checkout'), []);
+  const { activeSection } = useNav();
+  const { setKeybinding, removeKeybinding } = useKeybindings();
+  useEffect(() => {
+    if (activeSection === 'Log') {
+      setKeybinding('c', 'checkout');
+      return () => {
+        removeKeybinding('c');
+      };
+    }
+  }, [activeSection]);
 
   return (
     <>
