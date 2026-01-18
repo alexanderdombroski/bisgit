@@ -98,3 +98,23 @@ export async function getBranchList(): Promise<string[]> {
   const { stdout } = await execAsync("git for-each-ref --format='%(refname:short)' refs/heads");
   return stdout.trim().split(/\r?\n/);
 }
+
+type GitRemote = {
+  name: string;
+  url: string;
+  type: 'fetch' | 'push';
+};
+
+export async function getRemoteList(): Promise<GitRemote[]> {
+  const { stdout } = await execAsync('git remote -v');
+  const remoteList = stdout.trim().split(/\r?\n/);
+  return remoteList
+    .map((line) => {
+      const match = line.match(/^(\S+)\s+(\S+)\s+\((fetch|push)\)$/);
+      if (!match) return null;
+
+      const [, name, url, type] = match;
+      return { name, url, type };
+    })
+    .filter((r): r is GitRemote => r !== null);
+}
