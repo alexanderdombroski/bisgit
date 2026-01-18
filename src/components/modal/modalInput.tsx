@@ -24,8 +24,9 @@ export function ModalInput({ title, handleSubmit, modalControls }: ModalProps) {
     if (key.return) {
       if (isOpen) {
         handleSubmit(value);
+        setValue('');
+        close();
       }
-      close();
     }
   });
 

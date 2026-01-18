@@ -2,11 +2,14 @@ import { useEffect } from 'react';
 import { Text, Box, useInput } from 'ink';
 import { useKeybindings } from '../components/hooks/useKeybindings';
 import { useDimensions } from '../components/hooks/useDimensions';
-import { NavigationHeader, Router } from '../components/navigation';
+import { NavigationHeader, Router, useNav } from '../components/navigation';
 
 export function App() {
+  const { isLocked } = useNav();
+
   // eslint-disable-next-line no-unused-vars
   useInput((input, key) => {
+    if (isLocked) return;
     if (input.toLowerCase() === 'q') {
       process.exit();
     }

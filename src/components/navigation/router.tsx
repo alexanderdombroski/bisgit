@@ -2,7 +2,7 @@ import { Text, useInput } from 'ink';
 import { useNav } from './useNav';
 import Status from '../../pages/status';
 import Log from '../../pages/log';
-import Branches from '../../pages/branches';
+import { Branches } from '../../pages/branches';
 
 export function Router() {
   const { prevSection, nextSection, activeGroup, setActiveGroup } = useNav();
