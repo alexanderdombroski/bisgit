@@ -70,7 +70,7 @@ export default function Branches() {
 
   return (
     <>
-      <Section width="100%" title="Branches">
+      <Section width="100%" title="Branches" innerHeight={sectionHalfHeight - 1}>
         {branchList.map((branch) => (
           <Box key={branch} flexDirection="row" flexWrap="nowrap">
             <Box minWidth={2}>{branch === selectedValue ? <Text>{'> '}</Text> : null}</Box>

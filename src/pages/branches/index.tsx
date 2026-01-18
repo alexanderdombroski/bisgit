@@ -21,7 +21,7 @@ function AllSections() {
   return (
     <>
       <Box width={width} height={sectionHeight}>
-        <Box flexDirection="column" width="50%">
+        <Box flexDirection="column" width="50%" height={sectionHeight}>
           <Branches />
           <Worktrees />
         </Box>
