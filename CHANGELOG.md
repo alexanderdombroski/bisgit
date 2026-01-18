@@ -15,11 +15,12 @@
 - glossary command with advanced git terms
 - completions
 
-## [0.4.0] - unreleased
+## [0.4.0] - 2026-01-17
 
 ### Added
 
 - Branch page with branches, worktrees, and remotes
+- Create, delete, and switch branches
 
 ### Fixed
 
