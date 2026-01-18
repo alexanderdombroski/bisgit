@@ -19,6 +19,7 @@ import { savepoint } from './savepoint';
 import { sha } from './sha';
 import { track } from './track';
 import { update } from './update';
+import { showVersion } from './version';
 import { whoami } from './whoami';
 import { wipe } from './wipe';
 import { yank } from './yank';
@@ -45,6 +46,7 @@ const commands: Record<string, () => void | Promise<void>> = {
   sha,
   track,
   update,
+  '--version': showVersion,
   whoami,
   wipe,
   yank,
