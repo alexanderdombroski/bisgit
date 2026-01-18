@@ -8,10 +8,11 @@ export interface SectionProps extends BoxProps {
   title?: string;
   footer?: string;
   innerHeight?: string | number;
+  isModal?: boolean;
 }
 
 export function Section(props: SectionProps) {
-  const { title, footer, children, width, height, innerHeight } = props;
+  const { title, footer, children, width, height, innerHeight, isModal } = props;
   const { width: demensionWidth } = useDimensions();
   const sectionWidth = width ?? demensionWidth;
   const ref = useRef(null);
@@ -25,7 +26,7 @@ export function Section(props: SectionProps) {
 
   const innerBoxProps = { ...props, height: innerHeight, width: targetWidth };
   const { activeSection } = useNav();
-  const color = activeSection === title ? 'cyan' : '';
+  const color = activeSection === title || isModal ? 'cyan' : '';
 
   return (
     <Box ref={ref} flexDirection="column" height={height} width={sectionWidth}>

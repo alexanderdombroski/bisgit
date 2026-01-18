@@ -7,12 +7,24 @@ import { useResolved } from '../../components/hooks/useResolved';
 import { getBranchList } from '../../utils/git';
 import { useDimensions } from '../../components/hooks/useDimensions';
 import { useScrollable } from '../../components/hooks/useScrollable';
+import { useKeybindings } from '../../components/hooks/useKeybindings';
+import { useEffect } from 'react';
 
 export default function Branches() {
   const { activeSection, isLocked } = useNav();
   const { sectionHalfHeight } = useDimensions();
 
   const { value: allBranches = [], refresh } = useResolved(getBranchList);
+
+  const { setKeybinding, removeKeybinding } = useKeybindings();
+  useEffect(() => {
+    if (activeSection === 'Branches') {
+      setKeybinding('s', 'switch');
+      return () => {
+        removeKeybinding('s');
+      };
+    }
+  }, [activeSection]);
 
   const {
     outList: branchList,
@@ -31,6 +43,11 @@ export default function Branches() {
     refresh();
   };
 
+  const switchBranch = async () => {
+    await execAsync(`git switch ${selectedValue}`);
+    refresh();
+  };
+
   const controls = useModalControls();
 
   useInput((input, key) => {
@@ -44,6 +61,8 @@ export default function Branches() {
       controls.open();
     } else if (input === 'd') {
       deleteBranch();
+    } else if (input === 's') {
+      switchBranch();
     }
   });
 

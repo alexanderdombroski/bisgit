@@ -34,7 +34,7 @@ export function ModalInput({ title, handleSubmit, modalControls }: ModalProps) {
     isOpen && (
       <Box {...dimensions} position="absolute">
         <Box alignSelf="center" marginLeft={margin} marginRight={margin}>
-          <Section title={title} width={MODAL_WIDTH}>
+          <Section title={title} width={MODAL_WIDTH} isModal>
             <TextInput value={value} onChange={setValue} />
           </Section>
         </Box>
