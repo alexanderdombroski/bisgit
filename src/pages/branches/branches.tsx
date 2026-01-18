@@ -4,7 +4,7 @@ import { useModalControls, ModalInput } from '../../components/modal';
 import { useNav } from '../../components/navigation';
 import { execAsync } from '../../utils/commands';
 import { useResolved } from '../../components/hooks/useResolved';
-import { getBranchList } from '../../utils/git';
+import { getBranchList, getCurrentBranch } from '../../utils/git';
 import { useDimensions } from '../../components/hooks/useDimensions';
 import { useScrollable } from '../../components/hooks/useScrollable';
 import { useKeybindings } from '../../components/hooks/useKeybindings';
@@ -15,6 +15,7 @@ export default function Branches() {
   const { sectionHalfHeight } = useDimensions();
 
   const { value: allBranches = [], refresh } = useResolved(getBranchList);
+  const { value: currentBranch, refresh: refreshCurrent } = useResolved(getCurrentBranch);
 
   const { setKeybinding, removeKeybinding } = useKeybindings();
   useEffect(() => {
@@ -46,6 +47,7 @@ export default function Branches() {
   const switchBranch = async () => {
     await execAsync(`git switch ${selectedValue}`);
     refresh();
+    refreshCurrent();
   };
 
   const controls = useModalControls();
@@ -73,7 +75,7 @@ export default function Branches() {
           <Box key={branch} flexDirection="row" flexWrap="nowrap">
             <Box minWidth={2}>{branch === selectedValue ? <Text>{'> '}</Text> : null}</Box>
             <Box minWidth={8}>
-              <Text>{branch}</Text>
+              <Text color={branch === currentBranch ? 'magenta' : undefined}>{branch}</Text>
             </Box>
           </Box>
         ))}
