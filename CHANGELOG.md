@@ -21,6 +21,11 @@
 
 - Reflog and log tags mode for log page
 
+### Fixed
+
+- Stop amend if no staged changes
+- Autoprune works better with squash merged branhces
+
 ## [0.4.0] - 2026-01-17
 
 ### Added

@@ -24,11 +24,35 @@ export async function autoprune() {
   const branches = await getBranchList();
   for (const branch of branches) {
     if (branch === defaultBranch || RESERVED_BRANCHES.includes(branch)) continue;
-    const base = await getMergeBase(branch, defaultBranch);
-    const { code } = await spawnAsync('git', ['diff', '--quiet', base, branch]);
-    console.log(base, branch, code);
+
+    // Delete empty branches
+    const { code } = await spawnAsync('git', ['diff', '--quiet', defaultBranch, branch]);
     if (code === 0) {
-      await spawnGitWithColor(['branch', '-D', branch]);
+      deleteBranch(branch);
+      continue;
+    }
+
+    // Delete merged branches
+    const { code: isAncestorCode } = await spawnAsync('git', [
+      'merge-base',
+      '--is-ancestor',
+      branch,
+      defaultBranch,
+    ]);
+    if (isAncestorCode === 0) {
+      deleteBranch(branch);
+      continue;
+    }
+
+    // Delete squash merged branches
+    const base = await getMergeBase(branch, defaultBranch);
+    const { stdout } = await spawnAsync('git', ['merge-tree', base, defaultBranch, branch]);
+    if (!stdout?.trim()) {
+      deleteBranch(branch);
     }
   }
+}
+
+function deleteBranch(name: string) {
+  spawnGitWithColor(['branch', '-D', name]);
 }
