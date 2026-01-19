@@ -7,6 +7,7 @@ export type ModalControls = {
   isOpen: Boolean;
   close: () => void;
   open: () => void;
+  toggle: () => void;
 };
 
 export function useModalControls(): ModalControls {
@@ -19,6 +20,9 @@ export function useModalControls(): ModalControls {
   const open = () => {
     lock();
     setIsOpen(true);
+  };
+  const toggle = () => {
+    isOpen ? close() : open();
   };
 
   useInput((input, key) => {
@@ -36,5 +40,5 @@ export function useModalControls(): ModalControls {
     };
   }, [isOpen]);
 
-  return { isOpen, close, open };
+  return { isOpen, close, open, toggle };
 }

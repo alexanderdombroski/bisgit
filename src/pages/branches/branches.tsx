@@ -10,7 +10,7 @@ import { useScrollable } from '../../components/hooks/useScrollable';
 import { useKeybindings } from '../../components/hooks/useKeybindings';
 import { useEffect } from 'react';
 
-export default function Branches() {
+export function Branches() {
   const { activeSection, isLocked } = useNav();
   const { sectionHalfHeight } = useDimensions();
 

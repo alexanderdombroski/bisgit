@@ -4,25 +4,25 @@ import type { ModalControls } from './useModal';
 import { Section } from '../section';
 import SelectInput from 'ink-select-input';
 
-type Option = { value: string; label: string };
+type Option<V, L extends string = string> = { value: V; label: L };
 
-type ModalProps = {
+type ModalProps<V, L extends string = string> = {
   title: string;
-  options: Option[];
-  handleSubmit: ({ value, label }: Option) => void;
+  options: Readonly<Option<V, L>[]>;
+  handleSubmit: (option: Option<V, L>) => void;
   modalControls: ModalControls;
   initialIndex: number;
 };
 
 const MODAL_WIDTH = 36;
 
-export function QuickPick({
+export function QuickPick<V, L extends string = string>({
   title,
   handleSubmit,
   options,
   modalControls,
   initialIndex,
-}: ModalProps) {
+}: ModalProps<V, L>) {
   const { isOpen, close } = modalControls;
   const dimensions = useDimensions();
   const { width } = dimensions;
@@ -41,7 +41,12 @@ export function QuickPick({
       <Box {...dimensions} position="absolute">
         <Box alignSelf="center" marginLeft={margin} marginRight={margin}>
           <Section title={title} width={MODAL_WIDTH} isModal>
-            <SelectInput items={options} onSelect={handleSubmit} initialIndex={initialIndex} />
+            <SelectInput
+              // Casting is neccessary due to generic typing limiartions of library
+              items={options as Option<V, L>[]}
+              onSelect={handleSubmit as (item: Option<V>) => void}
+              initialIndex={initialIndex}
+            />
           </Section>
         </Box>
       </Box>

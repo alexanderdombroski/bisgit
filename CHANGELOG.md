@@ -15,6 +15,12 @@
 - glossary command with advanced git terms
 - completions
 
+## [0.5.0] - unreleased
+
+### Added
+
+- Reflog and log tags mode for log page
+
 ## [0.4.0] - 2026-01-17
 
 ### Added

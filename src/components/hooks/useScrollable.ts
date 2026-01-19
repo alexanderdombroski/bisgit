@@ -4,7 +4,7 @@ type ScrollableListControls<T> = {
   scrollUp: () => void;
   scrollDown: () => void;
   outList: T[];
-  selectedValue: T;
+  selectedValue: T | undefined;
   selectedIndex: number;
 };
 

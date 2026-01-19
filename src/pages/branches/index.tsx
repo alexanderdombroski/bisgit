@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { useDimensions } from '../../components/hooks/useDimensions';
 import { useKeybindings } from '../../components/hooks/useKeybindings';
 import { Box } from 'ink';
-import Branches from './branches';
+import { Branches } from './branches';
 import { Remotes } from './remotes';
 import { Worktrees } from './worktrees';
 
