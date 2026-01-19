@@ -26,6 +26,7 @@ export async function autoprune() {
     if (branch === defaultBranch || RESERVED_BRANCHES.includes(branch)) continue;
     const base = await getMergeBase(branch, defaultBranch);
     const { code } = await spawnAsync('git', ['diff', '--quiet', base, branch]);
+    console.log(base, branch, code);
     if (code === 0) {
       await spawnGitWithColor(['branch', '-D', branch]);
     }
