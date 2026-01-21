@@ -64,6 +64,7 @@
     "ink-spinner": "^5.0.0",
     "ink-text-input": "^6.0.0",
     "nanoid": "^5.1.6",
-    "react": "^19.2.3"
+    "react": "^19.2.3",
+    "strip-json-comments": "^5.0.3"
   }
 }
