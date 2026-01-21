@@ -15,16 +15,17 @@
 - glossary command with advanced git terms
 - completions
 
-## [0.5.0] - unreleased
+## [0.5.0] - 2026-01-21
 
 ### Added
 
-- Reflog and log tags mode for log page
+- Reflog and tags mode for log page
+- Improved modal design
 
 ### Fixed
 
 - Stop amend if no staged changes
-- Autoprune works better with squash merged branhces
+- Autoprune works better with squash merged branches
 
 ## [0.4.0] - 2026-01-17
 
