@@ -1,6 +1,5 @@
 import { useEffect } from 'react';
 import type { Dispatch, SetStateAction } from 'react';
-import { execAsync } from '../../utils/commands';
 import { Section } from '../../components/section';
 import { Box, Text, useInput } from 'ink';
 import { useDimensions } from '../../components/hooks/useDimensions';
@@ -40,10 +39,6 @@ export function Log({ setSha, mode }: LogProps) {
       scrollUp();
     } else if (key.downArrow) {
       scrollDown();
-    }
-
-    if (input === 'c' && selectedSha) {
-      execAsync(`git checkout ${selectedSha}`);
     }
   });
 

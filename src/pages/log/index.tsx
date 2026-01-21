@@ -8,6 +8,7 @@ import { type Mode, modes } from './modes';
 import { useKeybindings } from '../../components/hooks/useKeybindings';
 import { useNav } from '../../components/navigation';
 import { execAsync } from '../../utils/commands';
+import { isDiffClean } from '../../utils/git';
 
 export default function AllSections() {
   const controls = useModalControls();
@@ -22,8 +23,10 @@ export default function AllSections() {
       controls.toggle();
     }
     if (isLocked) return;
-    if (input === 'c') {
-      execAsync(`git checkout ${sha}`);
+    if (input === 'c' && sha) {
+      isDiffClean().then((isClean) => {
+        isClean && execAsync(`git checkout ${sha}`);
+      });
     }
   });
 

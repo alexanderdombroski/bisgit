@@ -62,7 +62,7 @@ export async function gitFetch(remote?: string, branch?: string) {
   await execAsync(cmd);
 }
 
-export async function isDiffClean() {
+export async function isDiffClean(): Promise<boolean> {
   const { stdout } = await spawnAsync('git', ['status', '--porcelain']);
   return !stdout?.trim();
 }
