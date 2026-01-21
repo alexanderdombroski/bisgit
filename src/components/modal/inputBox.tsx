@@ -1,18 +1,17 @@
 import React, { useState } from 'react';
 import { useInput } from 'ink';
 import TextInput from 'ink-text-input';
-import type { ModalControls } from './useModal';
+import { useModal } from './useModal';
 import { Modal } from './modal';
 
 type ModalProps = {
   title: string;
   handleSubmit: (value: string) => void;
-  modalControls: ModalControls;
 };
 
-export function ModalInput({ title, handleSubmit, modalControls }: ModalProps) {
+export function ModalInput({ title, handleSubmit }: ModalProps) {
   const [value, setValue] = useState('');
-  const { isOpen, close } = modalControls;
+  const { isOpen, close } = useModal();
 
   useInput((input, key) => {
     if (key.return) {

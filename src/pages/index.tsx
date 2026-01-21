@@ -3,13 +3,16 @@ import { KeybindingsProvider } from '../components/hooks/useKeybindings';
 import { App } from './app';
 import { NavProvider } from '../components/navigation/useNav';
 import { ThemeProvider } from '../components/hooks/useTheme';
+import { ModalProvider } from '../components/modal';
 
 function Root() {
   return (
     <ThemeProvider>
       <NavProvider>
         <KeybindingsProvider>
-          <App />
+          <ModalProvider>
+            <App />
+          </ModalProvider>
         </KeybindingsProvider>
       </NavProvider>
     </ThemeProvider>

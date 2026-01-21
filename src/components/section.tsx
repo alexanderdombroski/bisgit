@@ -12,7 +12,7 @@ export interface SectionProps extends BoxProps {
 }
 
 export function Section(props: SectionProps) {
-  const { title, footer, children, width, height, innerHeight, isModal } = props;
+  const { title, footer, children, width, height, innerHeight, isModal, backgroundColor } = props;
   const { width: demensionWidth } = useDimensions();
   const sectionWidth = width ?? demensionWidth;
   const ref = useRef(null);
@@ -29,7 +29,13 @@ export function Section(props: SectionProps) {
   const color = activeSection === title || isModal ? 'cyan' : '';
 
   return (
-    <Box ref={ref} flexDirection="column" height={height} width={sectionWidth}>
+    <Box
+      ref={ref}
+      flexDirection="column"
+      height={height}
+      width={sectionWidth}
+      backgroundColor={backgroundColor}
+    >
       {targetWidth !== 0 && (
         <>
           {title && (

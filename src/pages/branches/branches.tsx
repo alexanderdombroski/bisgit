@@ -1,6 +1,6 @@
 import { Box, Text, useInput } from 'ink';
 import { Section } from '../../components/section';
-import { useModalControls, ModalInput } from '../../components/modal';
+import { useModal, ModalInput } from '../../components/modal';
 import { useNav } from '../../components/navigation';
 import { execAsync } from '../../utils/commands';
 import { useResolved } from '../../components/hooks/useResolved';
@@ -50,7 +50,7 @@ export function Branches() {
     refreshCurrent();
   };
 
-  const controls = useModalControls();
+  const { setModal, open } = useModal();
 
   useInput((input, key) => {
     if (activeSection !== 'Branches' || isLocked) return;
@@ -60,7 +60,8 @@ export function Branches() {
     } else if (key.downArrow) {
       scrollDown();
     } else if (input === 'c') {
-      controls.open();
+      setModal(<ModalInput title="Name your new branch" handleSubmit={onCreate} />);
+      open();
     } else if (input === 'd') {
       deleteBranch();
     } else if (input === 's') {
@@ -80,7 +81,6 @@ export function Branches() {
           </Box>
         ))}
       </Section>
-      <ModalInput title="Name your new branch" handleSubmit={onCreate} modalControls={controls} />
     </>
   );
 }

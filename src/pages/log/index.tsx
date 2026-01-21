@@ -3,7 +3,7 @@ import { Box, useInput } from 'ink';
 import { useDimensions } from '../../components/hooks/useDimensions';
 import { CommitDetails } from './commitDetails';
 import { Log } from './log';
-import { QuickPick, useModalControls } from '../../components/modal';
+import { QuickPick, useModal } from '../../components/modal';
 import { type Mode, modes } from './modes';
 import { useKeybindings } from '../../components/hooks/useKeybindings';
 import { useNav } from '../../components/navigation';
@@ -11,7 +11,7 @@ import { execAsync } from '../../utils/commands';
 import { isDiffClean } from '../../utils/git';
 
 export default function AllSections() {
-  const controls = useModalControls();
+  const { setModal, toggle } = useModal();
   const [sha, setSha] = useState<string>();
   const { width, sectionHeight } = useDimensions();
   const [mode, setMode] = useState<Mode>(modes[0]);
@@ -20,7 +20,15 @@ export default function AllSections() {
   // eslint-disable-next-line no-unused-vars
   useInput((input, key) => {
     if (input === 'm') {
-      controls.toggle();
+      setModal(
+        <QuickPick
+          options={modes}
+          title="Log Type"
+          handleSubmit={setMode}
+          initialIndex={modes.indexOf(mode)}
+        />
+      );
+      toggle();
     }
     if (isLocked) return;
     if (input === 'c' && sha) {
@@ -40,19 +48,10 @@ export default function AllSections() {
   }, []);
 
   return (
-    <>
-      <Box width={width} height={sectionHeight}>
-        <Log setSha={setSha} mode={mode} />
-        <CommitDetails sha={sha} />
-      </Box>
-      <QuickPick
-        modalControls={controls}
-        options={modes}
-        title="Log Type"
-        handleSubmit={setMode}
-        initialIndex={modes.indexOf(mode)}
-      />
-    </>
+    <Box width={width} height={sectionHeight}>
+      <Log setSha={setSha} mode={mode} />
+      <CommitDetails sha={sha} />
+    </Box>
   );
 }
 

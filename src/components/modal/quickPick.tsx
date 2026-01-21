@@ -1,5 +1,5 @@
 import { useInput } from 'ink';
-import type { ModalControls } from './useModal';
+import { useModal } from './useModal';
 import SelectInput from 'ink-select-input';
 import { Modal } from './modal';
 
@@ -9,7 +9,6 @@ type ModalProps<V, L extends string = string> = {
   title: string;
   options: Readonly<Option<V, L>[]>;
   handleSubmit: (option: Option<V, L>) => void;
-  modalControls: ModalControls;
   initialIndex: number;
 };
 
@@ -17,10 +16,9 @@ export function QuickPick<V, L extends string = string>({
   title,
   handleSubmit,
   options,
-  modalControls,
   initialIndex,
 }: ModalProps<V, L>) {
-  const { isOpen, close } = modalControls;
+  const { isOpen, close } = useModal();
 
   useInput((input, key) => {
     if (key.return) {
