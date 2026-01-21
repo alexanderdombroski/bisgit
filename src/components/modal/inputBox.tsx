@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
-import { Box, useInput } from 'ink';
+import { useInput } from 'ink';
 import TextInput from 'ink-text-input';
-import { useDimensions } from '../hooks/useDimensions';
 import type { ModalControls } from './useModal';
-import { Section } from '../section';
+import { Modal } from './modal';
 
 type ModalProps = {
   title: string;
@@ -11,14 +10,9 @@ type ModalProps = {
   modalControls: ModalControls;
 };
 
-const MODAL_WIDTH = 36;
-
 export function ModalInput({ title, handleSubmit, modalControls }: ModalProps) {
   const [value, setValue] = useState('');
   const { isOpen, close } = modalControls;
-  const dimensions = useDimensions();
-  const { width } = dimensions;
-  const margin = Math.floor((width - MODAL_WIDTH) / 2);
 
   useInput((input, key) => {
     if (key.return) {
@@ -32,13 +26,9 @@ export function ModalInput({ title, handleSubmit, modalControls }: ModalProps) {
 
   return (
     isOpen && (
-      <Box {...dimensions} position="absolute">
-        <Box alignSelf="center" marginLeft={margin} marginRight={margin}>
-          <Section title={title} width={MODAL_WIDTH} isModal>
-            <TextInput value={value} onChange={setValue} />
-          </Section>
-        </Box>
-      </Box>
+      <Modal title={title}>
+        <TextInput value={value} onChange={setValue} />
+      </Modal>
     )
   );
 }
