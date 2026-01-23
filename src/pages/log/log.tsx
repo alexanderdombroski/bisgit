@@ -7,6 +7,7 @@ import { useScrollable } from '../../components/hooks/useScrollable';
 import { useResolved } from '../../components/hooks/useResolved';
 import { useNav } from '../../components/navigation';
 import type { Mode } from './modes';
+import { useTruncationMode } from '../../components/hooks/useTruncationMode';
 
 type LogProps = {
   setSha: Dispatch<SetStateAction<string | undefined>>;
@@ -17,6 +18,8 @@ export function Log({ setSha, mode }: LogProps) {
   const { label: currentMode, value: logGetter } = mode;
   const { sectionHeight } = useDimensions();
   const { activeSection, isLocked } = useNav();
+
+  const { mode: truncateMode } = useTruncationMode();
 
   const { resolved, value: items = [] } = useResolved(logGetter, [currentMode]);
 
@@ -52,7 +55,7 @@ export function Log({ setSha, mode }: LogProps) {
               <Text color="yellow">{sha}</Text>
             </Box>
             <Box>
-              <Text wrap="truncate-end">{message}</Text>
+              <Text wrap={truncateMode}>{message}</Text>
             </Box>
           </Box>
         ))}

@@ -15,6 +15,13 @@
 - glossary command with advanced git terms
 - completions
 
+## [0.6.0] - unreleased
+
+### Added
+
+- Add panning ability for some views
+- Add error modals and better handling
+
 ## [0.5.0] - 2026-01-21
 
 ### Added
