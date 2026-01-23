@@ -9,6 +9,7 @@ import { useDimensions } from '../../components/hooks/useDimensions';
 import { useScrollable } from '../../components/hooks/useScrollable';
 import { useKeybindings } from '../../components/hooks/useKeybindings';
 import { useEffect } from 'react';
+import { useErrorCatcher } from '../../components/hooks/useErrorCatcher';
 
 export function Branches() {
   const { activeSection, isLocked } = useNav();
@@ -52,6 +53,7 @@ export function Branches() {
 
   const { setModal, open } = useModal();
 
+  const { attempt } = useErrorCatcher();
   useInput((input, key) => {
     if (activeSection !== 'Branches' || isLocked) return;
 
@@ -63,9 +65,9 @@ export function Branches() {
       setModal(<ModalInput title="Name your new branch" handleSubmit={onCreate} />);
       open();
     } else if (input === 'd') {
-      deleteBranch();
+      attempt(deleteBranch);
     } else if (input === 's') {
-      switchBranch();
+      attempt(switchBranch);
     }
   });
 

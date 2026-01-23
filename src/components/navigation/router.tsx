@@ -1,8 +1,10 @@
 import { Text, useInput } from 'ink';
-import { useNav } from './useNav';
+import { type SectionGroup, useNav } from './useNav';
 import Status from '../../pages/status';
 import { Log } from '../../pages/log';
 import { Branches } from '../../pages/branches';
+import { ErrorBoundary } from '../errorBoundry';
+import { ErrorCatcherProvder } from '../hooks/useErrorCatcher';
 
 export function Router() {
   const { prevSection, nextSection, activeGroup, setActiveGroup } = useNav();
@@ -21,7 +23,17 @@ export function Router() {
     }
   });
 
-  switch (activeGroup) {
+  return (
+    <ErrorBoundary>
+      <ErrorCatcherProvder>
+        <Nav group={activeGroup} />
+      </ErrorCatcherProvder>
+    </ErrorBoundary>
+  );
+}
+
+function Nav({ group }: { group: SectionGroup }) {
+  switch (group) {
     case 'Status':
       return <Status />;
     case 'Log':
@@ -29,6 +41,6 @@ export function Router() {
     case 'Branches':
       return <Branches />;
     default:
-      return <Text>Error, unknown page {activeGroup}</Text>;
+      return <Text>Error, unknown page {group}</Text>;
   }
 }

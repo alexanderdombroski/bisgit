@@ -8,7 +8,7 @@ import { type Mode, modes } from './modes';
 import { useKeybindings } from '../../components/hooks/useKeybindings';
 import { useNav } from '../../components/navigation';
 import { execAsync } from '../../utils/commands';
-import { isDiffClean } from '../../utils/git';
+import { useErrorCatcher } from '../../components/hooks/useErrorCatcher';
 
 export default function AllSections() {
   const { setModal, toggle } = useModal();
@@ -16,6 +16,7 @@ export default function AllSections() {
   const { width, sectionHeight } = useDimensions();
   const [mode, setMode] = useState<Mode>(modes[0]);
   const { isLocked } = useNav();
+  const { attempt } = useErrorCatcher();
 
   // eslint-disable-next-line no-unused-vars
   useInput((input, key) => {
@@ -32,9 +33,7 @@ export default function AllSections() {
     }
     if (isLocked) return;
     if (input === 'c' && sha) {
-      isDiffClean().then((isClean) => {
-        isClean && execAsync(`git checkout ${sha}`);
-      });
+      attempt(() => execAsync(`git checkout ${sha}`));
     }
   });
 

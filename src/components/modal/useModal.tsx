@@ -5,11 +5,15 @@ import { useNav } from '../navigation';
 import { useKeybindings } from '../hooks/useKeybindings';
 
 type ModalContextType = {
-  setModal: (modal: ReactNode) => void;
+  setModal: (modal: ReactNode, options?: ModalOptions) => void;
   isOpen: Boolean;
   close: () => void;
   open: () => void;
   toggle: () => void;
+};
+
+type ModalOptions = {
+  onClose?: () => void;
 };
 
 const ModalContext = createContext<ModalContextType>({} as ModalContextType);
@@ -27,10 +31,13 @@ export function ModalProvider({ children }: PropsWithChildren) {
   const [modal, _setModal] = useState<ReactNode>(null);
   const { lock, unlock } = useNav();
   const [isOpen, setIsOpen] = useState(false);
+  const [onClose, setOnClose] = useState<() => void>();
 
   const close = () => {
     unlock();
     setIsOpen(false);
+    onClose?.();
+    _setModal(null);
   };
   const open = () => {
     lock();
@@ -39,8 +46,9 @@ export function ModalProvider({ children }: PropsWithChildren) {
   const toggle = () => {
     isOpen ? close() : open();
   };
-  const setModal = (modal: ReactNode) => {
+  const setModal = (modal: ReactNode, options?: ModalOptions) => {
     close();
+    setOnClose(options?.onClose);
     _setModal(modal);
   };
 
