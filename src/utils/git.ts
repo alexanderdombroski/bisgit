@@ -1,5 +1,5 @@
 import { normalize } from 'node:path';
-import { execAsync, spawnAsync } from './commands';
+import { execAsync, parseStdoutByLine, spawnAsync } from './commands';
 
 export async function getCurrentBranch() {
   const { stdout } = await execAsync('git branch --show-current');
@@ -68,8 +68,7 @@ export async function isDiffClean(): Promise<boolean> {
 }
 
 export async function getStatusPorcelain(): Promise<string[] | undefined> {
-  const { stdout } = await spawnAsync('git', ['status', '--porcelain']);
-  return stdout?.trim()?.split(/\r?\n/);
+  return await parseStdoutByLine('git status --porcelain');
 }
 
 export async function getMergeBase(ref1: string, ref2: string) {
@@ -90,13 +89,11 @@ export async function revParse(ref: string): Promise<string> {
 }
 
 export async function revList(ref1: string, ref2: string, reverse?: boolean): Promise<string[]> {
-  const { stdout } = await execAsync(`git rev-list ${reverse ? '--reverse' : ''} ${ref1}..${ref2}`);
-  return stdout.trim().split(/\r?\n/);
+  return await parseStdoutByLine(`git rev-list ${reverse ? '--reverse' : ''} ${ref1}..${ref2}`);
 }
 
 export async function getBranchList(): Promise<string[]> {
-  const { stdout } = await execAsync("git for-each-ref --format='%(refname:short)' refs/heads");
-  return stdout.trim().split(/\r?\n/);
+  return await parseStdoutByLine("git for-each-ref --format='%(refname:short)' refs/heads");
 }
 
 type GitRemote = {
@@ -129,8 +126,7 @@ type BlameLine = {
 
 // eslint-disable-next-line no-unused-vars
 async function getBlame(file: string): Promise<BlameLine[]> {
-  const { stdout } = await execAsync(`git blame --line-porcelain --abbrev=8 --follow "${file}"`);
-  const lines = stdout.trim().split(/\r?\n/);
+  const lines = await parseStdoutByLine(`git blame --line-porcelain --abbrev=8 --follow "${file}"`);
   const result: BlameLine[] = [];
   let current: Partial<BlameLine> = {};
 
