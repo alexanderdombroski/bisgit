@@ -48,8 +48,12 @@ export function Log({ setSha, mode }: LogProps) {
   return (
     <Section overflowY="hidden" height="100%" title="Log" width="50%">
       {resolved &&
-        logItems.map(({ sha, message }) => (
-          <Box key={`${sha}-${mode}`} flexDirection="row" flexWrap="nowrap">
+        logItems.map(({ sha, message }, i) => (
+          <Box
+            key={`${sha}-${mode.label}${mode.label === 'reflog' ? i : ''}`}
+            flexDirection="row"
+            flexWrap="nowrap"
+          >
             <Box minWidth={2}>{sha === selectedSha ? <Text>{'> '}</Text> : null}</Box>
             <Box minWidth={8}>
               <Text color="yellow">{sha}</Text>
