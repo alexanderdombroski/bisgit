@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 type ScrollableListControls<T> = {
   scrollUp: () => void;
@@ -6,16 +6,36 @@ type ScrollableListControls<T> = {
   outList: T[];
   selectedValue: T | undefined;
   selectedIndex: number;
+  refresh: () => void;
 };
 
 export function useScrollable<T>(items: T[], outputLength: number): ScrollableListControls<T> {
   const [offset, setOffset] = useState(0);
   const [selectedIndex, setSelectedIndex] = useState(0);
+  const lastSelectedValueRef = useRef<T>(undefined);
+  const [id, setId] = useState(0);
+  const refresh = () => setId((prev) => prev + 1);
 
+  // Determine which item to select when items change
   useEffect(() => {
-    setOffset(0);
-    setSelectedIndex(0);
-  }, [items]);
+    let newIndex = 0;
+    if (lastSelectedValueRef.current !== undefined) {
+      const foundIndex = items.findIndex((item) => item === lastSelectedValueRef.current);
+      if (foundIndex >= 0) newIndex = foundIndex;
+    }
+
+    setSelectedIndex(newIndex);
+    const newOffset = Math.min(
+      Math.max(newIndex - Math.floor(outputLength / 2), 0),
+      Math.max(0, items.length - outputLength)
+    );
+    setOffset(newOffset);
+  }, [items, outputLength, id]);
+
+  // Update last selected value every time
+  useEffect(() => {
+    lastSelectedValueRef.current = items[selectedIndex];
+  }, [selectedIndex, items]);
 
   const maxOffset = Math.max(0, items.length - outputLength);
   const maxIndex = items.length - 1;
@@ -51,5 +71,6 @@ export function useScrollable<T>(items: T[], outputLength: number): ScrollableLi
     outList,
     selectedIndex,
     selectedValue,
+    refresh,
   };
 }
