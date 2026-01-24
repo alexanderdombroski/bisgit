@@ -5,7 +5,7 @@ import { useDimensions } from '../components/hooks/useDimensions';
 import { NavigationHeader, Router, useNav } from '../components/navigation';
 
 export function App() {
-  const { isLocked } = useNav();
+  const { isLocked, activeGroup } = useNav();
 
   // eslint-disable-next-line no-unused-vars
   useInput((input, key) => {
@@ -22,7 +22,7 @@ export function App() {
 
   return (
     <Box flexDirection="column" {...deminsions}>
-      <NavigationHeader />
+      <NavigationHeader activeGroup={activeGroup} />
       <Router />
       <Box flexDirection="row">
         {Object.entries(keybindings).map(([key, action]) => (

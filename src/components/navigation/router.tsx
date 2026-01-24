@@ -6,6 +6,7 @@ import { Branches } from '../../pages/branches';
 import { ErrorBoundary } from '../errorBoundry';
 import { ErrorCatcherProvder } from '../hooks/useErrorCatcher';
 import { Files } from '../../pages/files';
+import { TreeNavigationProvder } from '../../pages/files/useTreeNavigation';
 
 export function Router() {
   const { prevSection, nextSection, activeGroup, setActiveGroup } = useNav();
@@ -29,7 +30,9 @@ export function Router() {
   return (
     <ErrorBoundary>
       <ErrorCatcherProvder>
-        <Nav group={activeGroup} />
+        <TreeNavigationProvder>
+          <Nav group={activeGroup} />
+        </TreeNavigationProvder>
       </ErrorCatcherProvder>
     </ErrorBoundary>
   );
