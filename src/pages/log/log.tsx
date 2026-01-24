@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useCallback, useEffect } from 'react';
 import type { Dispatch, SetStateAction } from 'react';
 import { Section } from '../../components/section';
 import { Box, Text, useInput } from 'ink';
@@ -6,20 +6,29 @@ import { useDimensions } from '../../components/hooks/useDimensions';
 import { useScrollable } from '../../components/hooks/useScrollable';
 import { useResolved } from '../../components/hooks/useResolved';
 import { useNav } from '../../components/navigation';
-import type { Mode } from './modes';
+import type { LogEntry, Mode } from './modes';
 import { useTruncationMode } from '../../components/hooks/useTruncationMode';
 
 type LogProps = {
   setSha: Dispatch<SetStateAction<string | undefined>>;
   mode: Mode;
+  file?: string;
 };
 
-export function Log({ setSha, mode }: LogProps) {
-  const { label: currentMode, value: logGetter } = mode;
+export function Log({ setSha, mode, file }: LogProps) {
+  const { label: currentMode, value: modeGetter } = mode;
   const { sectionHeight } = useDimensions();
   const { activeSection, isLocked } = useNav();
 
   const { mode: truncateMode } = useTruncationMode();
+
+  const logGetter = useCallback(() => {
+    if (modeGetter.length && file) {
+      return modeGetter(file);
+    } else {
+      return (modeGetter as () => Promise<LogEntry[]>)();
+    }
+  }, [modeGetter, file]);
 
   const { resolved, value: items = [] } = useResolved(logGetter, [currentMode]);
 

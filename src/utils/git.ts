@@ -118,3 +118,59 @@ export async function getRemoteList(): Promise<GitRemote[]> {
     })
     .filter((r): r is GitRemote => r !== null);
 }
+
+type BlameLine = {
+  commit: string;
+  author: string;
+  authorTime: string; // ISO string
+  authorTz: string;
+  lineNumber: number;
+};
+
+// eslint-disable-next-line no-unused-vars
+async function getBlame(file: string): Promise<BlameLine[]> {
+  const { stdout } = await execAsync(`git blame --line-porcelain --abbrev=8 --follow "${file}"`);
+  const lines = stdout.trim().split(/\r?\n/);
+  const result: BlameLine[] = [];
+  let current: Partial<BlameLine> = {};
+
+  for (const line of lines) {
+    // Match the commit line (first line of each block)
+    const commitMatch = line.match(/^([0-9a-f]{8,40}) (\d+) (\d+) (\d+)$/);
+    if (commitMatch) {
+      current.commit = commitMatch[1];
+      current.lineNumber = parseInt(commitMatch[2], 10); // line number in file
+      continue;
+    }
+
+    // Match author
+    const authorMatch = line.match(/^author (.+)$/);
+    if (authorMatch) {
+      current.author = authorMatch[1];
+      continue;
+    }
+
+    // Match author-time
+    const timeMatch = line.match(/^author-time (\d+)$/);
+    if (timeMatch) {
+      const unixTs = parseInt(timeMatch[1], 10);
+      current.authorTime = new Date(unixTs * 1000).toISOString();
+      continue;
+    }
+
+    // Match author timezone
+    const tzMatch = line.match(/^author-tz (.+)$/);
+    if (tzMatch) {
+      current.authorTz = tzMatch[1];
+      continue;
+    }
+
+    // Blank line indicates end of current block
+    if (line === '' && current.commit) {
+      result.push(current as BlameLine);
+      current = {};
+    }
+  }
+
+  return result;
+}

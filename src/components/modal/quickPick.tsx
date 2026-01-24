@@ -10,6 +10,7 @@ type ModalProps<V, L extends string = string> = {
   options: Readonly<Option<V, L>[]>;
   handleSubmit: (option: Option<V, L>) => void;
   initialIndex: number;
+  width?: number;
 };
 
 export function QuickPick<V, L extends string = string>({
@@ -17,6 +18,7 @@ export function QuickPick<V, L extends string = string>({
   handleSubmit,
   options,
   initialIndex,
+  width,
 }: ModalProps<V, L>) {
   const { isOpen, close } = useModal();
 
@@ -30,7 +32,7 @@ export function QuickPick<V, L extends string = string>({
 
   return (
     isOpen && (
-      <Modal title={title}>
+      <Modal title={title} width={width}>
         <SelectInput
           // Casting is neccessary due to generic typing limiartions of library
           items={options as Option<V, L>[]}

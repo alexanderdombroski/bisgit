@@ -4,11 +4,17 @@ export const modes = [
   { value: () => parseLog('git log --oneline -n 400'), label: 'log' },
   { value: () => parseLog('git log --oneline --tags --no-walk --decorate'), label: 'tags' },
   { value: () => parseLog('git reflog'), label: 'reflog' },
+  {
+    value: () => parseLog('git log  --oneline --author=\"$(git config user.name)\"'),
+    label: 'my commits',
+  },
+  { value: (file: string) => parseLog(`git log --oneline "${file}"`), label: 'file' },
+  { value: (file: string) => parseLog(`git blame --follow "${file}"`), label: 'blame' },
 ] as const;
 
 export type Mode = (typeof modes)[number];
 
-type LogEntry = {
+export type LogEntry = {
   sha: string;
   message: string;
 };

@@ -25,7 +25,7 @@ export default function AllSections() {
         <QuickPick
           options={modes}
           title="Log Type"
-          handleSubmit={setMode}
+          handleSubmit={(m) => setMode(m as Mode)}
           initialIndex={modes.indexOf(mode)}
         />
       );
