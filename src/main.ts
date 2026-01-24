@@ -1,8 +1,10 @@
 import { getCommand } from './utils/args';
+import { requireGitRepo } from './utils/guards';
 
 async function main() {
   const cmd = getCommand();
   if (!cmd) {
+    requireGitRepo();
     const { renderApp } = await import('./pages/index.jsx');
     return renderApp();
   }
