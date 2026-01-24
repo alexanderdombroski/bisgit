@@ -21,7 +21,7 @@ export function Tree() {
   }, [visibilityVersion]);
 
   return (
-    <Section title="Files" innerHeight={sectionHeight}>
+    <Section title="Files" innerHeight={sectionHeight} width="50%">
       {pwd && tree && (
         <Folder name={path.basename(pwd)} contents={tree} depth={0} fp={pwd} isRoot />
       )}

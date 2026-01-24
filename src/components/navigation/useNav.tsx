@@ -2,6 +2,7 @@ import { useState, createContext, useContext, type PropsWithChildren } from 'rea
 
 export const sections = {
   Files: 'Files',
+  'File Meta': 'Files',
   Status: 'Status',
   Log: 'Log',
   'Commit Details': 'Log',
