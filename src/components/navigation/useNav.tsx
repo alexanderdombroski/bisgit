@@ -1,6 +1,7 @@
 import { useState, createContext, useContext, type PropsWithChildren } from 'react';
 
 export const sections = {
+  Files: 'Files',
   Status: 'Status',
   Log: 'Log',
   'Commit Details': 'Log',
@@ -88,7 +89,7 @@ export function NavProvider({ children }: PropsWithChildren) {
 
 export function useNav(): NavContextValue {
   const context = useContext(NavContext);
-  if (!context) {
+  if (Object.keys(context).length === 0) {
     throw new Error('useNavContext must be used within a NavProvider');
   }
   return context;

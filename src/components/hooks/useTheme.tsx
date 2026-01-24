@@ -19,7 +19,7 @@ export function ThemeProvider({ children }: PropsWithChildren) {
 // Hook to use the context
 export const useTheme = () => {
   const context = useContext(ThemeContext);
-  if (!context) {
+  if (Object.keys(context).length === 0) {
     throw new Error('useKeybindings must be used within a KeybindingsProvider');
   }
   return context;

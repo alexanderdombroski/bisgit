@@ -55,7 +55,7 @@ export function TruncationModeProvder({ children }: PropsWithChildren) {
 
 export function useTruncationMode(): { mode: TruncateMode } {
   const context = useContext(TruncationMode);
-  if (!context) {
+  if (Object.keys(context).length === 0) {
     throw new Error('useTruncationMode must be used within an TruncationModeProvider');
   }
 

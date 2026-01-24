@@ -20,7 +20,7 @@ const ModalContext = createContext<ModalContextType>({} as ModalContextType);
 
 export function useModal() {
   const context = useContext(ModalContext);
-  if (!context) {
+  if (Object.keys(context).length === 0) {
     throw new Error('useKeybindings must be used within a KeybindingsProvider');
   }
   return context;

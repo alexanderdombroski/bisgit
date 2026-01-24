@@ -42,7 +42,7 @@ export function ErrorCatcherProvder<Args extends any[]>({ children }: PropsWithC
 
 export function useErrorCatcher(): ErrorCatcherType<any[]> {
   const context = useContext(ErrorCatcher);
-  if (!context) {
+  if (Object.keys(context).length === 0) {
     throw new Error('useErrorCatcher must be used within an ErrorCatcherProvider');
   }
   return context;
