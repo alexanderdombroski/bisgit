@@ -39,7 +39,7 @@ export function TreeNavigationProvder({ children }: PropsWithChildren) {
   const selectableList = useMemo(() => {
     if (!tree) return [];
     const files = flattenTree(tree);
-    return files.filter((fp) => visibleParts.has(fp)) ?? [];
+    return files.filter((fp) => visibleParts.has(fp));
   }, [visibleParts.size, tree, visibilityVersion]);
 
   const [selectedIndex, setSelectedIndex] = useState(0);
@@ -115,14 +115,17 @@ export function TreeNavigationProvder({ children }: PropsWithChildren) {
 
   return (
     <TreeNavigation.Provider
-      value={{
-        visibleParts,
-        selectedFile: selectedValue,
-        tree,
-        refresh,
-        visibleTreeItems: visibleTreeItems.current,
-        visibilityVersion,
-      }}
+      value={useMemo(
+        () => ({
+          visibleParts,
+          selectedFile: selectedValue,
+          tree,
+          refresh,
+          visibleTreeItems: visibleTreeItems.current,
+          visibilityVersion,
+        }),
+        [selectedValue, visibilityVersion]
+      )}
     >
       {children}
     </TreeNavigation.Provider>
