@@ -5,16 +5,23 @@ import { Section } from '../../components/section';
 import { getGitDirRoot } from '../../utils/git';
 import { useEffect, useState } from 'react';
 import { useTreeNavigation } from './useTreeNavigation';
+import { useDimensions } from '../../components/hooks/useDimensions';
 
 const RIGHT_ARROW = '\u{2192}';
 const DOWN_ARROW = '\u{2193}';
 
 export function Tree() {
-  const { tree } = useTreeNavigation();
+  const { sectionHeight } = useDimensions();
+  const { tree, visibilityVersion } = useTreeNavigation();
   const { value: pwd } = useResolved(getGitDirRoot);
+  const [, setId] = useState(0);
+
+  useEffect(() => {
+    setId((prev) => prev + 1);
+  }, [visibilityVersion]);
 
   return (
-    <Section title="Files">
+    <Section title="Files" innerHeight={sectionHeight}>
       {pwd && tree && (
         <Folder name={path.basename(pwd)} contents={tree} depth={0} fp={pwd} isRoot />
       )}
@@ -35,13 +42,13 @@ type FolderProps = FileProps & {
 };
 
 function Folder(props: FolderProps) {
-  const { contents, depth, fp, rp = '', isRoot = false } = props;
-  const [isExpanded, setIsExpanded] = useState(isRoot);
+  const { contents, depth, fp, rp = '.', isRoot = false } = props;
   const isFile = Object.keys(contents).length === 0;
-  const { visibleParts, selectedFile } = useTreeNavigation();
+  const [isExpanded, setIsExpanded] = useState(isRoot || isFile);
+  const { visibleParts, selectedFile, refresh, visibleTreeItems } = useTreeNavigation();
 
   useInput((input, key) => {
-    if (isFile || fp !== selectedFile) return;
+    if (isFile || rp !== selectedFile) return;
     if (key.rightArrow) {
       setIsExpanded(true);
     } else if (key.leftArrow) {
@@ -50,20 +57,28 @@ function Folder(props: FolderProps) {
   });
 
   useEffect(() => {
-    if (isFile || isExpanded) {
-      if (!visibleParts.has(fp)) {
-        visibleParts.add(fp);
-      }
-    } else {
-      if (visibleParts.has(fp)) {
-        visibleParts.delete(fp);
+    const operation = isExpanded ? 'add' : 'delete';
+    const prevLen = visibleParts.size;
+
+    for (const key of Object.keys(contents)) {
+      const id = path.join(rp, key);
+      if (operation === 'add') {
+        visibleParts.add(id);
+      } else {
+        visibleParts.delete(id);
       }
     }
-  }, [isFile, isExpanded]);
 
-  if (isFile) return <File {...props} />; // empty file
+    if (prevLen !== visibleParts.size) {
+      refresh();
+    }
+  }, [isExpanded]);
+
+  if (!visibleTreeItems.has(rp)) return null;
 
   const newDepth = depth + 2;
+  if (isFile) return <File key={fp} {...props} depth={newDepth} />; // empty file
+
   return (
     <>
       {/* folder name */}
