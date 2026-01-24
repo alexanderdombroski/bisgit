@@ -44,6 +44,12 @@ export async function getGitDir() {
   return normalize(stdout.trim());
 }
 
+/** Returns the root of the repo or worktree */
+export async function getGitDirRoot(): Promise<string> {
+  const { stdout } = await execAsync('git rev-parse --show-toplevel');
+  return normalize(stdout.trim());
+}
+
 export async function isValidRemote(name: string): Promise<boolean> {
   const { code } = await spawnAsync('git', ['remote', 'get-url', name], { stdio: 'ignore' });
   return code === 0;

@@ -19,8 +19,10 @@
 
 ### Added
 
+- TODO - Upgraded the status page
+- Add more log modes
 - Add panning ability for some views
-- Add error modals and better handling
+- Add error modals and better error handling
 
 ## [0.5.0] - 2026-01-21
 
