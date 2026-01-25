@@ -7,6 +7,7 @@ import { ErrorBoundary } from '../errorBoundry';
 import { ErrorCatcherProvder } from '../hooks/useErrorCatcher';
 import { Files } from '../../pages/files';
 import { TreeNavigationProvder } from '../../pages/files/useTreeNavigation';
+import { MessagingProvder } from '../hooks/useMessaging';
 
 export function Router() {
   const { prevSection, nextSection, activeGroup, setActiveGroup } = useNav();
@@ -30,9 +31,11 @@ export function Router() {
   return (
     <ErrorBoundary>
       <ErrorCatcherProvder>
-        <TreeNavigationProvder>
-          <Nav group={activeGroup} />
-        </TreeNavigationProvder>
+        <MessagingProvder>
+          <TreeNavigationProvder>
+            <Nav group={activeGroup} />
+          </TreeNavigationProvder>
+        </MessagingProvder>
       </ErrorCatcherProvder>
     </ErrorBoundary>
   );

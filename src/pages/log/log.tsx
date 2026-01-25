@@ -8,27 +8,28 @@ import { useResolved } from '../../components/hooks/useResolved';
 import { useNav } from '../../components/navigation';
 import type { LogEntry, Mode } from './modes';
 import { useTruncationMode } from '../../components/hooks/useTruncationMode';
+import { useTreeNavigation } from '../files/useTreeNavigation';
 
 type LogProps = {
   setSha: Dispatch<SetStateAction<string | undefined>>;
   mode: Mode;
-  file?: string;
 };
 
-export function Log({ setSha, mode, file }: LogProps) {
+export function Log({ setSha, mode }: LogProps) {
   const { label: currentMode, value: modeGetter } = mode;
   const { sectionHeight } = useDimensions();
   const { activeSection, isLocked } = useNav();
+  const { selectedFile } = useTreeNavigation();
 
   const { mode: truncateMode } = useTruncationMode();
 
   const logGetter = useCallback(() => {
-    if (modeGetter.length && file) {
-      return modeGetter(file);
+    if (modeGetter.length && selectedFile) {
+      return modeGetter(selectedFile);
     } else {
       return (modeGetter as () => Promise<LogEntry[]>)();
     }
-  }, [modeGetter, file]);
+  }, [modeGetter, selectedFile]);
 
   const { resolved, value: items = [] } = useResolved(logGetter, [currentMode]);
 

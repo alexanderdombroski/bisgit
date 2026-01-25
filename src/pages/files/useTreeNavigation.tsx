@@ -141,7 +141,7 @@ export function useTreeNavigation(): TreeNavigationType {
 
 // --------------- UTILS ---------------
 
-const getContents = (tree: Tree, path: string) => {
+export const getContents = (tree: Tree, path: string) => {
   const parts = path.split('/');
   let contents = tree;
   for (let part of parts) {

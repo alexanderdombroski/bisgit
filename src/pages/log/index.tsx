@@ -9,12 +9,24 @@ import { useKeybindings } from '../../components/hooks/useKeybindings';
 import { useNav } from '../../components/navigation';
 import { execAsync } from '../../utils/commands';
 import { useErrorCatcher } from '../../components/hooks/useErrorCatcher';
+import { useMessaging } from '../../components/hooks/useMessaging';
 
 export default function AllSections() {
   const { setModal, toggle } = useModal();
   const [sha, setSha] = useState<string>();
   const { width, sectionHeight } = useDimensions();
   const [mode, setMode] = useState<Mode>(modes[0]);
+
+  const { receiveMessage } = useMessaging();
+  useEffect(() => {
+    if (receiveMessage('log-file')) {
+      setMode(modes[4]);
+    }
+    if (receiveMessage('blame-file')) {
+      setMode(modes[5]);
+    }
+  }, []);
+
   const { isLocked } = useNav();
   const { attempt } = useErrorCatcher();
 
