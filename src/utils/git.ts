@@ -176,3 +176,29 @@ async function getBlame(file: string): Promise<BlameLine[]> {
 
   return result;
 }
+
+type EditDetails = {
+  authorName: string;
+  authorEmail: string;
+  authorDate: string;
+  shortHash: string;
+};
+
+export async function getLastFileEditInfo(file: string): Promise<Partial<EditDetails>> {
+  try {
+    const { stdout } = await execAsync(`git log -1 --format='%an|%ae|%ad|%h' -- "${file}"`, {
+      encoding: 'utf8',
+    });
+
+    const [authorName, authorEmail, authorDate, shortHash] = stdout.trim().split('|');
+
+    return {
+      authorName,
+      authorEmail,
+      authorDate,
+      shortHash,
+    };
+  } catch {
+    return {};
+  }
+}
