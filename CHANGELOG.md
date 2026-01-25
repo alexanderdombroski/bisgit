@@ -15,11 +15,11 @@
 - glossary command with advanced git terms
 - completions
 
-## [0.6.0] - unreleased
+## [0.6.0] - 2026-01-24
 
 ### Added
 
-- TODO - Upgraded the status page
+- Add files page
 - Add more log modes
 - Add panning ability for some views
 - Add error modals and better error handling
