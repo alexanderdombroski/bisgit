@@ -38,7 +38,7 @@ Full Tui coming soon
 
 - `gi pwd` shows repo root path.
 - `gi wipe` clears all uncommitted trackable files
-- `gi files <commit>` shows the files edited by the given commit.
+- `gi files <commit>` shows files of the commit or stash.
 - `gi churn` shows you the 25 most edited files.
 - `gi exclude` and `gi include` allows you to ignore files locally without modifying the .gitignore file.
 - `gi remote-default` shows whether the remote default branch is 'main', 'master', etc.

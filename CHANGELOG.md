@@ -15,6 +15,14 @@
 - glossary command with advanced git terms
 - completions
 
+## [0.7.0] - unreleased
+
+### Added
+
+### Fixed
+
+- gi files command no longer omits untracked files of stash refs
+
 ## [0.6.0] - 2026-01-24
 
 ### Added
