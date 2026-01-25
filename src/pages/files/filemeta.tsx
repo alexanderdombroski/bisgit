@@ -2,11 +2,15 @@ import { Box, measureElement, Text } from 'ink';
 import { useDimensions } from '../../components/hooks/useDimensions';
 import { Section } from '../../components/section';
 import { useTreeNavigation } from './useTreeNavigation';
-import { useMemo, useRef } from 'react';
+import { useEffect, useMemo, useRef } from 'react';
+import { useNav } from '../../components/navigation';
+import { useKeybindings } from '../../components/hooks/useKeybindings';
 
-export function FileMeta({}) {
+export function FileMeta() {
   const { sectionHeight } = useDimensions();
+  const { activeSection } = useNav();
   const { selectedFile } = useTreeNavigation();
+
   const ref = useRef(null);
   const targetWidth = useMemo(() => {
     if (!ref.current) return 0;
@@ -14,9 +18,13 @@ export function FileMeta({}) {
     return width - 4;
   }, [ref.current]);
 
+  // eslint-disable-next-line no-unused-vars
+  const { setKeybinding, removeKeybinding } = useKeybindings();
+  useEffect(() => {}, [activeSection]);
+
   return (
     <Box width="50%" height={sectionHeight} ref={ref}>
-      <Section title="File Meta" width="100%" innerHeight="100%">
+      <Section width="100%" title="File Meta" innerHeight={sectionHeight - 1}>
         {selectedFile && <Title width={targetWidth} text={selectedFile} />}
       </Section>
     </Box>
@@ -25,7 +33,7 @@ export function FileMeta({}) {
 
 export function Title({ width, text }: { width: number; text: string }) {
   if (text.length > width) {
-    return <Text wrap="truncate-end">{text}</Text>;
+    return <Text>{text}</Text>;
   }
 
   const totalPadding = Math.max(0, width - text.length - 2);

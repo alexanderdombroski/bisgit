@@ -1,4 +1,4 @@
-import { Box, Text, useInput } from 'ink';
+import { Box, Text } from 'ink';
 import path from 'node:path';
 import { useResolved } from '../../components/hooks/useResolved';
 import { Section } from '../../components/section';
@@ -18,17 +18,8 @@ const NAVIGATION_KEY = `${LEFT_ARROW}${UP_ARROW}${DOWN_ARROW}${RIGHT_ARROW}`;
 
 export function Tree() {
   const { sectionHeight } = useDimensions();
-  const { tree, visibilityVersion } = useTreeNavigation();
-  const { value: pwd } = useResolved(getGitDirRoot);
-  const [, setId] = useState(0);
-
-  useEffect(() => {
-    setId((prev) => prev + 1);
-  }, [visibilityVersion]);
-
-  const { setKeybinding, removeKeybinding } = useKeybindings();
   const { activeSection } = useNav();
-
+  const { setKeybinding, removeKeybinding } = useKeybindings();
   useEffect(() => {
     if (activeSection === 'Files') {
       setKeybinding(NAVIGATION_KEY, 'NAVIGATION_KEY');
@@ -36,11 +27,18 @@ export function Tree() {
     }
   }, [activeSection]);
 
+  const { tree, version } = useTreeNavigation();
+  const { value: pwd } = useResolved(getGitDirRoot);
+
+  const [, setVersion] = useState(0);
+
+  useEffect(() => {
+    setVersion((prev) => prev + 1);
+  }, [version]);
+
   return (
     <Section title="Files" innerHeight={sectionHeight} width="50%">
-      {pwd && tree && (
-        <Folder name={path.basename(pwd)} contents={tree} depth={0} fp={pwd} isRoot />
-      )}
+      {pwd && tree && <Folder name={path.basename(pwd)} contents={tree} depth={0} fp={pwd} />}
     </Section>
   );
 }
@@ -55,47 +53,21 @@ type FileProps = {
 
 type FolderProps = FileProps & {
   contents: Record<string, any>;
-  isRoot?: boolean;
 };
 
 function Folder(props: FolderProps) {
-  const { contents, depth, fp, rp = '.', isRoot = false } = props;
+  const { contents, depth, fp, rp = '.' } = props;
   const isFile = Object.keys(contents).length === 0;
-  const [isExpanded, setIsExpanded] = useState(isRoot || isFile);
-  const { visibleParts, selectedFile, refresh, visibleTreeItems } = useTreeNavigation();
+  const { selectedFile, visibleFiles, expandedFiles } = useTreeNavigation();
   const isSelected = rp === selectedFile;
 
-  useInput((input, key) => {
-    if (isFile || rp !== selectedFile) return;
-    if (key.rightArrow) {
-      setIsExpanded(true);
-    } else if (key.leftArrow) {
-      setIsExpanded(false);
-    }
-  });
-
-  useEffect(() => {
-    const operation = isExpanded ? 'add' : 'delete';
-    const prevLen = visibleParts.size;
-
-    for (const key of Object.keys(contents)) {
-      const id = path.join(rp, key);
-      if (operation === 'add') {
-        visibleParts.add(id);
-      } else {
-        visibleParts.delete(id);
-      }
-    }
-
-    if (prevLen !== visibleParts.size) {
-      refresh();
-    }
-  }, [isExpanded]);
-
-  if (!visibleTreeItems.has(rp)) return null;
+  if (!visibleFiles.has(rp)) return null;
 
   const newDepth = depth + 2;
-  if (isFile) return <File key={fp} {...props} depth={newDepth} isSelected={isSelected} />; // empty file
+  if (isFile) return <File key={fp} {...props} depth={newDepth} isSelected={isSelected} />;
+
+  const stub = `${rp}/`;
+  const isExpanded = setSome(expandedFiles, (p) => p.startsWith(stub)) || depth === 0;
 
   return (
     <>
@@ -110,12 +82,11 @@ function Folder(props: FolderProps) {
       </Box>
       {isExpanded &&
         Object.entries(contents).map(([name, contents]) => {
-          const fullPath = path.join(fp, name);
           const relativePath = path.join(rp, name);
-          // folder contents (file or folder)
+          const fullPath = path.join(fp, name);
+
           return (
             <Folder
-              key={`${fullPath}-${isExpanded}`}
               name={name}
               contents={contents}
               depth={newDepth}
@@ -139,3 +110,11 @@ const File = memo<FileProps>(
   },
   (prev, next) => prev.isSelected === next.isSelected && prev.fp === next.fp
 );
+
+/** set.values().some((v) => boolean) */
+function setSome<T>(set: Set<T>, predicate: (value: T) => boolean) {
+  for (const value of set) {
+    if (predicate(value)) return true;
+  }
+  return false;
+}

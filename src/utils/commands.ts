@@ -29,7 +29,8 @@ export const execAsync = promisify(exec);
 
 export async function parseStdoutByLine(command: string): Promise<string[]> {
   const { stdout } = await execAsync(command);
-  return stdout.trim().split(/\r?\n/);
+  const output = stdout.trim();
+  return output ? output.split(/\r?\n/) : [];
 }
 
 export async function spawnAsync(cmd: string, args: string[], options: SpawnOptions = {}) {

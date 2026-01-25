@@ -14,82 +14,91 @@ import { useNav } from '../../components/navigation';
 import { flattenTree, getFileTree, type Tree } from '../../utils/fs';
 
 type TreeNavigationType = {
-  visibleParts: Set<string>;
-  visibleTreeItems: Set<string>;
+  expandedFiles: Set<string>;
+  visibleFiles: Set<string>;
   selectedFile?: string;
   tree?: Tree;
-  refresh: () => void;
-  /** Added to root of tree for refresh */
-  visibilityVersion: number;
+  version: number;
 };
 
 const TreeNavigation = createContext({} as TreeNavigationType);
 
 export function TreeNavigationProvder({ children }: PropsWithChildren) {
-  const { value: tree, resolved } = useResolved(getFileTree);
-  const { sectionHeight } = useDimensions();
   const { activeSection } = useNav();
+  const { sectionHeight } = useDimensions();
   const outputLength = sectionHeight - 3;
 
-  const [visibilityVersion, setVisibilityVersion] = useState(0);
-  const refresh = () => setVisibilityVersion((prev) => prev + 1);
+  // Tree State
+  const { value: { tree, files } = {}, resolved } = useResolved(formatFileTree);
+  const expandedFiles = useRef(new Set<string>());
+  const visibleFiles = useRef(new Set<string>(['.']));
+  const [selectedFile, setSelectedFile] = useState<string>();
 
-  const visibleParts = useMemo(() => new Set<string>(Object.keys(tree ?? {})), [tree]);
-
-  const selectableList = useMemo(() => {
-    if (!tree) return [];
-    const files = flattenTree(tree);
-    return files.filter((fp) => visibleParts.has(fp));
-  }, [visibleParts.size, tree, visibilityVersion]);
-
-  const [selectedIndex, setSelectedIndex] = useState(0);
-  const selectedValue = selectableList[selectedIndex];
-  const lastPathRef = useRef<string>(selectedValue);
-
+  // Initialize State
   useEffect(() => {
-    if (lastPathRef.current) {
-      const newIndex = selectableList.indexOf(lastPathRef.current);
-      if (newIndex !== -1) {
-        setSelectedIndex(newIndex);
-      }
+    if (tree && files) {
+      expandedFiles.current = new Set(Object.keys(tree));
+      setSelectedFile(files[0]);
     }
-  }, [selectableList]);
+  }, [resolved]);
 
-  const scrollDown = () => {
-    setSelectedIndex((prev) => Math.min(prev + 1, selectableList.length - 1));
-  };
+  const selectableList = useMemo(
+    () => files?.filter((fp) => expandedFiles.current.has(fp)) ?? [],
+    [expandedFiles.current.size, resolved]
+  );
 
-  const scrollUp = () => {
-    setSelectedIndex((prev) => Math.max(prev - 1, 0));
-  };
+  const [version, setVersion] = useState(0);
+  const refresh = () => setVersion((prev) => prev + 1);
 
+  // Controls
   useInput((input, key) => {
-    if (activeSection !== 'Files') return;
+    if (activeSection !== 'Files' || !tree || !selectedFile) return;
     if (key.upArrow) {
-      scrollUp();
+      const i = Math.max(0, selectableList.indexOf(selectedFile) - 1);
+      setSelectedFile(selectableList[i]);
+      refresh();
     } else if (key.downArrow) {
-      scrollDown();
+      const i = Math.min(selectableList.length - 1, selectableList.indexOf(selectedFile) + 1);
+      setSelectedFile(selectableList[i]);
+      refresh();
+    }
+
+    let folderAction;
+    if (key.leftArrow) {
+      folderAction = 'collapse';
+    } else if (key.rightArrow) {
+      folderAction = 'expand';
+    }
+    if (folderAction) {
+      const contents = getContents(tree, selectedFile);
+      if (!contents) return;
+      for (let file of Object.keys(contents)) {
+        const path = `${selectedFile}/${file}`;
+        folderAction === 'expand'
+          ? expandedFiles.current.add(path)
+          : expandedFiles.current.delete(path);
+      }
+      refresh();
     }
   });
 
-  // Calculate final array of shown items
-  const parents = selectedValue ? getParents(selectedValue) : [];
-  const slidingWindowSize = Math.max(1, outputLength - parents.length);
-
-  // const visibleF = useRef
-  const visibleTreeItems = useRef(new Set<string>());
+  // Calculate final shown items
   useEffect(() => {
-    visibleTreeItems.current.clear();
-    visibleTreeItems.current.add('.');
+    visibleFiles.current.clear();
+    visibleFiles.current.add('.');
     if (selectableList.length <= outputLength) {
-      selectableList.forEach((fp) => visibleTreeItems.current.add(fp));
+      selectableList.forEach((fp) => visibleFiles.current.add(fp));
+      return;
     }
+
+    const parents = selectedFile ? getParents(selectedFile) : [];
+    const slidingWindowSize = Math.max(1, outputLength - parents.length);
 
     // Remove parents from the pool to avoid duplicates in the slice
     const nonParentItems = selectableList.filter((item) => !parents.includes(item));
 
     // Find where the selected item is in the "pool"
-    const poolSelectedIndex = selectedValue ? nonParentItems.indexOf(selectedValue) : 0;
+    const poolSelectedIndex = selectedFile ? nonParentItems.indexOf(selectedFile) : 0;
 
     // Calculate a centered offset for the sliding window
     let start = Math.max(0, poolSelectedIndex - Math.floor(slidingWindowSize / 2));
@@ -103,29 +112,19 @@ export function TreeNavigationProvder({ children }: PropsWithChildren) {
     const slice = nonParentItems.slice(start, end);
 
     [...parents, ...slice].forEach((fp) => {
-      visibleTreeItems.current.add(fp);
+      visibleFiles.current.add(fp);
     });
-  }, [selectableList.length, parents, slidingWindowSize, selectedValue]);
-
-  useEffect(() => {
-    if (resolved) {
-      refresh();
-    }
-  }, [resolved]);
+  }, [selectableList.length, selectedFile, outputLength]);
 
   return (
     <TreeNavigation.Provider
-      value={useMemo(
-        () => ({
-          visibleParts,
-          selectedFile: selectedValue,
-          tree,
-          refresh,
-          visibleTreeItems: visibleTreeItems.current,
-          visibilityVersion,
-        }),
-        [selectedValue, visibilityVersion]
-      )}
+      value={{
+        version,
+        tree,
+        visibleFiles: visibleFiles.current,
+        expandedFiles: expandedFiles.current,
+        selectedFile,
+      }}
     >
       {children}
     </TreeNavigation.Provider>
@@ -139,6 +138,23 @@ export function useTreeNavigation(): TreeNavigationType {
   }
   return context;
 }
+
+// --------------- UTILS ---------------
+
+const getContents = (tree: Tree, path: string) => {
+  const parts = path.split('/');
+  let contents = tree;
+  for (let part of parts) {
+    contents = contents[part];
+  }
+  return contents;
+};
+
+const formatFileTree = async () => {
+  const tree = await getFileTree();
+  const files = flattenTree(tree);
+  return { tree, files };
+};
 
 /** Helper to get parents of a unix path */
 const getParents = (path: string): string[] => {

@@ -7,7 +7,7 @@ function AllSections() {
   const { width, sectionHeight } = useDimensions();
 
   return (
-    <Box width={width} minHeight={sectionHeight}>
+    <Box width={width} height={sectionHeight}>
       <Tree />
       <FileMeta />
     </Box>
