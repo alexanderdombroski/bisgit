@@ -38,6 +38,7 @@ export function Log({ setSha, mode }: LogProps) {
     scrollDown,
     outList: logItems,
     selectedValue,
+    renderedIndex,
   } = useScrollable(items, sectionHeight - 2);
   const selectedSha = selectedValue?.sha;
 
@@ -55,16 +56,24 @@ export function Log({ setSha, mode }: LogProps) {
     }
   });
 
+  const isNonUniqueShaMode = nonUniqueShaLogs.includes(mode.label);
+
   return (
     <Section overflowY="hidden" height="100%" title="Log" width="50%">
       {resolved &&
         logItems.map(({ sha, message }, i) => (
           <Box
-            key={`${sha}-${mode.label}${mode.label === 'reflog' ? i : ''}`}
+            key={`${sha}-${mode.label}${isNonUniqueShaMode ? i : ''}`}
             flexDirection="row"
             flexWrap="nowrap"
           >
-            <Box minWidth={2}>{sha === selectedSha ? <Text>{'> '}</Text> : null}</Box>
+            <Box minWidth={2}>
+              {sha === selectedSha ? (
+                <Text color={isNonUniqueShaMode && i === renderedIndex ? 'magenta' : undefined}>
+                  {'> '}
+                </Text>
+              ) : null}
+            </Box>
             <Box minWidth={8}>
               <Text color="yellow">{sha}</Text>
             </Box>
@@ -76,3 +85,5 @@ export function Log({ setSha, mode }: LogProps) {
     </Section>
   );
 }
+
+const nonUniqueShaLogs: Mode['label'][] = ['blame', 'reflog'];

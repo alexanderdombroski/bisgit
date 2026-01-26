@@ -6,6 +6,7 @@ type ScrollableListControls<T> = {
   outList: T[];
   selectedValue: T | undefined;
   selectedIndex: number;
+  renderedIndex: number;
   refresh: () => void;
 };
 
@@ -70,6 +71,7 @@ export function useScrollable<T>(items: T[], outputLength: number): ScrollableLi
     scrollUp,
     outList,
     selectedIndex,
+    renderedIndex: selectedIndex - offset,
     selectedValue,
     refresh,
   };
