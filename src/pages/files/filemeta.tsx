@@ -4,7 +4,7 @@ import { Section } from '../../components/section';
 import { useTreeNavigation } from './useTreeNavigation';
 import { useMemo, useRef } from 'react';
 import { useResolved } from '../../components/hooks/useResolved';
-import { getLastFileEditInfo } from '../../utils/git';
+import { type FileChange, getLastFileEditInfo, getLinesChanged } from '../../utils/git';
 import { useTruncationMode } from '../../components/hooks/useTruncationMode';
 
 export function FileMeta() {
@@ -23,6 +23,10 @@ export function FileMeta() {
     [selectedFile]
   );
   const { authorDate, authorEmail, authorName, shortHash } = value;
+  const { value: { added, deleted } = {}, resolved } = useResolved(
+    async () => getRecentFileLines(shortHash, selectedFile),
+    [shortHash, selectedFile]
+  );
   const { mode } = useTruncationMode();
 
   return (
@@ -33,10 +37,26 @@ export function FileMeta() {
         {authorName && <Text wrap={mode}>Edited By: {authorName}</Text>}
         {authorDate && <Text wrap={mode}>Edit On: {authorDate}</Text>}
         {authorEmail && <Text wrap={mode}>Contact: {authorEmail}</Text>}
+        {resolved && (added || deleted) && (
+          <Box flexDirection="row" flexWrap="nowrap">
+            <Text>Changes:&nbsp;</Text>
+            <Text color="green">+{added ?? 0}&nbsp;</Text>
+            <Text color="red">-{deleted ?? 0}</Text>
+          </Box>
+        )}
       </Section>
     </Box>
   );
 }
+
+const getRecentFileLines = async (
+  shortHash?: string,
+  selectedFile?: string
+): Promise<FileChange> => {
+  if (!shortHash || !selectedFile) return {} as FileChange;
+  const changes = await getLinesChanged(shortHash);
+  return changes.find(({ file }) => selectedFile === file) ?? ({} as FileChange);
+};
 
 export function Title({ width, text }: { width: number; text: string }) {
   if (text.length > width) {
