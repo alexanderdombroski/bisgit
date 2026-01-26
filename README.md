@@ -2,7 +2,7 @@
 
 <img alt="biscuit with jelly" src="https://github.com/alexanderdombroski/bisgit/blob/main/public/bisgit.png" width="200px" />
 
-Full Tui coming soon
+Run `gi` or `bisgit` for full TUI.
 
 ## Commands
 
@@ -19,7 +19,7 @@ Full Tui coming soon
 - `gi conflict <branch>` shows all conflicts that would occur in a merge.
 - `gi abort` and `gi continue` are useful in conflict resolution situations.
 - `gi files <ref>` shows files of the commit or stash.
-- `gi lines <ref> <ref?>` shows the number of lines changed.
+- `gi lines <ref> <ref?>` shows the number of lines changed. Use `-v` for verbose output.
 
 ### Branching
 
