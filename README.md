@@ -33,7 +33,7 @@ Run `gi` or `bisgit` for full TUI.
 - `gi code-review <pr>` checks out a pr and creates a diff similar to github's code review diff viewer.
 - `gi whoami` shows github username.
 - `gi languages` prints the percentages of languages for this repo.
-- `gi coauthor <username>` commits with a co-authorship description.
+- `gi coauthor <username?>` commits with a co-authorship description.
 
 ### Utility
 

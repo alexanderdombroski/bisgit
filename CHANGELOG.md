@@ -6,7 +6,7 @@
 
 - [1.0](#100---unreleased) - Initial Release
 
-## [1.0.0] - unreleased
+## [1.0.0] - UNRELEASED
 
 ### Added
 
@@ -14,6 +14,12 @@
 - more custom git workflow commands
 - glossary command with advanced git terms
 - completions
+
+## [0.8.0] - UNRELEASED
+
+### Added
+
+- gi coauthor with no args provides a list of names to choose from based on history
 
 ## [0.7.0] - 2026-01-25
 
