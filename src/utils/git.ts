@@ -202,3 +202,55 @@ export async function getLastFileEditInfo(file: string): Promise<Partial<EditDet
     return {};
   }
 }
+
+export type FileChange = {
+  file: string;
+  added: number | null;
+  deleted: number | null;
+  changeType: ChangeType;
+};
+
+export type ChangeType = 'modified' | 'added' | 'deleted' | 'binary';
+
+export async function getLinesChanged(ref1: string, ref2?: string): Promise<FileChange[]> {
+  const cmd = ref2
+    ? `git diff --numstat ${ref1} ${ref2}`
+    : isStashRef(ref1)
+      ? `git stash show --numstat --format="" --include-untracked ${ref1}`
+      : `git show --numstat --format="" ${ref1}`;
+
+  const changes = await parseStdoutByLine(cmd);
+
+  return changes.map((line) => {
+    const [addedRaw, deletedRaw, file] = line.split('\t');
+
+    // binary files show up as "- -"
+    if (addedRaw === '-' && deletedRaw === '-') {
+      return {
+        file,
+        added: null,
+        deleted: null,
+        changeType: 'binary',
+      };
+    }
+
+    const added = Number(addedRaw);
+    const deleted = Number(deletedRaw);
+
+    let changeType: FileChange['changeType'] = 'modified';
+
+    if (added > 0 && deleted === 0) changeType = 'added';
+    else if (added === 0 && deleted > 0) changeType = 'deleted';
+
+    return {
+      file,
+      added,
+      deleted,
+      changeType,
+    };
+  });
+}
+
+export function isStashRef(ref: string): boolean {
+  return /^stash@\{\d+\}$/.test(ref);
+}

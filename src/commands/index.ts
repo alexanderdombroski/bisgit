@@ -12,6 +12,7 @@ import { files } from './files';
 import { fixup } from './fixup';
 import { include } from './include';
 import { languages } from './languages';
+import { lines } from './lines';
 import { pwd } from './pwd';
 import { rebranch } from './rebranch';
 import { remoteDefault } from './remoteDefault';
@@ -39,6 +40,7 @@ const commands: Record<string, () => void | Promise<void>> = {
   fixup,
   include,
   languages,
+  lines,
   pwd,
   rebranch,
   'remote-default': remoteDefault,

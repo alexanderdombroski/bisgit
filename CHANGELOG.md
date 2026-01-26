@@ -19,6 +19,8 @@
 
 ### Added
 
+- gi lines command to show change counts of files, stashes, or commits
+
 ### Fixed
 
 - gi files command no longer omits untracked files of stash refs
