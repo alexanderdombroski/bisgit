@@ -12,8 +12,10 @@ function AllSections() {
   const { setKeybinding, removeKeybinding } = useKeybindings();
   useEffect(() => {
     setKeybinding('s', 'stash');
+    setKeybinding('d', 'drop');
+    setKeybinding('a', 'apply');
     setKeybinding('p', 'pop');
-    return () => removeKeybinding(['s', 'p']);
+    return () => removeKeybinding(['s', 'p', 'd', 'a']);
   }, []);
 
   return (

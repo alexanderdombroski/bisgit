@@ -1,12 +1,14 @@
-import { Box, Text } from 'ink';
+import { Box, Text, useInput } from 'ink';
 import type { Dispatch, SetStateAction } from 'react';
 import { Section } from '../../components/section';
-import { parseStdoutByLine } from '../../utils/commands';
+import { execAsync, parseStdoutByLine } from '../../utils/commands';
 import { useResolved } from '../../components/hooks/useResolved';
 import { useScrollable } from '../../components/hooks/useScrollable';
 import { useDimensions } from '../../components/hooks/useDimensions';
 import { useTruncationMode } from '../../components/hooks/useTruncationMode';
 import { useEffect } from 'react';
+import { useErrorCatcher } from '../../components/hooks/useErrorCatcher';
+import { QuickPick, useModal } from '../../components/modal';
 
 type StashesProps = {
   setStash: Dispatch<SetStateAction<string | undefined>>;
@@ -15,8 +17,10 @@ type StashesProps = {
 export function Stashes({ setStash }: StashesProps) {
   const { sectionHeight } = useDimensions();
   const { mode } = useTruncationMode();
+  const { attempt } = useErrorCatcher();
+  const { setModal, open } = useModal();
 
-  const { value: allStashes = [] } = useResolved(getStashList);
+  const { value: allStashes = [], refresh } = useResolved(getStashList);
   const {
     outList: stashList,
     selectedValue,
@@ -26,6 +30,39 @@ export function Stashes({ setStash }: StashesProps) {
   useEffect(() => {
     setStash(`stash@{${selectedIndex}}`);
   }, [selectedIndex]);
+
+  const cmdBuilder = (cmd: string) => async () => {
+    await execAsync(`git stash ${cmd} stash@{${selectedIndex}}`);
+    refresh();
+  };
+
+  // eslint-disable-next-line no-unused-vars
+  useInput((input, key) => {
+    if (input === 's') {
+      setModal(
+        <QuickPick
+          title="Stash"
+          options={[
+            { value: 'git stash', label: 'tracked only' },
+            { value: 'git stash -u', label: 'tracked & untracked' },
+          ]}
+          handleSubmit={({ value }) =>
+            attempt(async () => {
+              await execAsync(value);
+              refresh();
+            })
+          }
+        />
+      );
+      open();
+    } else if (input === 'a') {
+      attempt(cmdBuilder('apply'));
+    } else if (input === 'p') {
+      attempt(cmdBuilder('pop'));
+    } else if (input === 'd') {
+      attempt(cmdBuilder('drop'));
+    }
+  });
 
   return (
     <Section title="Stashes" width="50%" height="100%">

@@ -9,7 +9,7 @@ type ModalProps<V, L extends string = string> = {
   title: string;
   options: Readonly<Option<V, L>[]>;
   handleSubmit: (option: Option<V, L>) => void;
-  initialIndex: number;
+  initialIndex?: number;
   width?: number;
 };
 
