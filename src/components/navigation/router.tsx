@@ -8,6 +8,7 @@ import { ErrorCatcherProvder } from '../hooks/useErrorCatcher';
 import { Files } from '../../pages/files';
 import { TreeNavigationProvder } from '../../pages/files/useTreeNavigation';
 import { MessagingProvder } from '../hooks/useMessaging';
+import { Stashes } from '../../pages/stashes';
 
 export function Router() {
   const { prevSection, nextSection, activeGroup, setActiveGroup } = useNav();
@@ -25,6 +26,8 @@ export function Router() {
       setActiveGroup('Log');
     } else if (input === '4') {
       setActiveGroup('Branches');
+    } else if (input === '5') {
+      setActiveGroup('Stashes');
     }
   });
 
@@ -51,6 +54,8 @@ function Nav({ group }: { group: SectionGroup }) {
       return <Log />;
     case 'Branches':
       return <Branches />;
+    case 'Stashes':
+      return <Stashes />;
     default:
       return <Text>Error, unknown page "{group}"</Text>;
   }

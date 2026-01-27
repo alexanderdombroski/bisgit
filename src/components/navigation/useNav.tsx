@@ -9,6 +9,8 @@ export const sections = {
   Branches: 'Branches',
   Worktrees: 'Branches',
   Remotes: 'Branches',
+  Stashes: 'Stashes',
+  'Stash Details': 'Stashes',
 } as const;
 
 const _sectionsNames = Object.keys(sections) as Section[];
