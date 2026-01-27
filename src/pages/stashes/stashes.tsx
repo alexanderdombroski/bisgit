@@ -9,6 +9,7 @@ import { useTruncationMode } from '../../components/hooks/useTruncationMode';
 import { useEffect } from 'react';
 import { useErrorCatcher } from '../../components/hooks/useErrorCatcher';
 import { QuickPick, useModal } from '../../components/modal';
+import { useNav } from '../../components/navigation';
 
 type StashesProps = {
   setStash: Dispatch<SetStateAction<string | undefined>>;
@@ -19,12 +20,15 @@ export function Stashes({ setStash }: StashesProps) {
   const { mode } = useTruncationMode();
   const { attempt } = useErrorCatcher();
   const { setModal, open } = useModal();
+  const { activeSection } = useNav();
 
   const { value: allStashes = [], refresh } = useResolved(getStashList);
   const {
     outList: stashList,
     selectedValue,
     selectedIndex,
+    scrollUp,
+    scrollDown,
   } = useScrollable(allStashes, sectionHeight - 2);
 
   useEffect(() => {
@@ -36,7 +40,6 @@ export function Stashes({ setStash }: StashesProps) {
     refresh();
   };
 
-  // eslint-disable-next-line no-unused-vars
   useInput((input, key) => {
     if (input === 's') {
       setModal(
@@ -61,6 +64,13 @@ export function Stashes({ setStash }: StashesProps) {
       attempt(cmdBuilder('pop'));
     } else if (input === 'd') {
       attempt(cmdBuilder('drop'));
+    }
+
+    if (activeSection !== 'Stashes') return;
+    if (key.upArrow) {
+      scrollUp();
+    } else if (key.downArrow) {
+      scrollDown();
     }
   });
 
