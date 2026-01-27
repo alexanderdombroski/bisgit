@@ -1,6 +1,6 @@
 {
   "name": "bisgit",
-  "version": "0.7.0",
+  "version": "0.8.0",
   "description": "Git CLI tool to simplify common advanced git workflows",
   "main": "dist/main.js",
   "bin": {
