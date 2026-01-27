@@ -15,7 +15,8 @@ function AllSections() {
     setKeybinding('d', 'drop');
     setKeybinding('a', 'apply');
     setKeybinding('p', 'pop');
-    return () => removeKeybinding(['s', 'p', 'd', 'a']);
+    setKeybinding('r', 'reword');
+    return () => removeKeybinding(['s', 'p', 'd', 'a', 'r']);
   }, []);
 
   return (

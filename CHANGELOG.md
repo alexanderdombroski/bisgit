@@ -19,6 +19,7 @@
 
 ### Added
 
+- stashes pages with various stash commands
 - gi coauthor with no args provides a list of names to choose from based on history
 
 ## [0.7.0] - 2026-01-25
