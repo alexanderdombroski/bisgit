@@ -77,7 +77,7 @@ export function Branches() {
         {branchList.map((branch) => (
           <Box key={branch} flexDirection="row" flexWrap="nowrap">
             <Box minWidth={2}>{branch === selectedValue ? <Text>{'> '}</Text> : null}</Box>
-            <Box minWidth={8}>
+            <Box>
               <Text color={branch === currentBranch ? 'magenta' : undefined}>{branch}</Text>
             </Box>
           </Box>

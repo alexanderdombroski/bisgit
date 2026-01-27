@@ -3,10 +3,11 @@ import { useDimensions } from '../../components/hooks/useDimensions';
 import { Stashes } from './stashes';
 import { StashDetails } from './stashDetails';
 import { useKeybindings } from '../../components/hooks/useKeybindings';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 function AllSections() {
   const { sectionHeight, width } = useDimensions();
+  const [stash, setStash] = useState<string>();
 
   const { setKeybinding, removeKeybinding } = useKeybindings();
   useEffect(() => {
@@ -17,8 +18,8 @@ function AllSections() {
 
   return (
     <Box width={width} height={sectionHeight}>
-      <Stashes />
-      <StashDetails />
+      <Stashes setStash={setStash} />
+      <StashDetails stash={stash} />
     </Box>
   );
 }
