@@ -41,10 +41,10 @@
     "prepare": "husky"
   },
   "devDependencies": {
-    "@types/node": "^25.0.10",
-    "@types/react": "^19.2.9",
-    "@typescript-eslint/eslint-plugin": "^8.53.1",
-    "@typescript-eslint/parser": "^8.53.1",
+    "@types/node": "^25.1.0",
+    "@types/react": "^19.2.10",
+    "@typescript-eslint/eslint-plugin": "^8.54.0",
+    "@typescript-eslint/parser": "^8.54.0",
     "esbuild": "^0.27.2",
     "esbuild-lazy-analyzer": "^1.4.0",
     "esbuild-visualizer": "^0.7.0",
@@ -64,7 +64,7 @@
     "ink-spinner": "^5.0.0",
     "ink-text-input": "^6.0.0",
     "nanoid": "^5.1.6",
-    "react": "^19.2.3",
+    "react": "^19.2.4",
     "strip-json-comments": "^5.0.3"
   }
 }
