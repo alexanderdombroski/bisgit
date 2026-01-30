@@ -21,8 +21,8 @@ export async function wipe() {
 
   const reset = async () => {
     await execAsync('git reset --hard');
-    await execAsync('git clean -f');
-    return `Altered ${report.willDelete.length + report.willRecreate.length + report.willRevert.length} files.`;
+    await execAsync('git clean -df');
+    return `Altered ${report.willDelete.length + report.willRecreate.length + report.willRevert.length} files and folders.`;
   };
 
   render(
@@ -42,8 +42,13 @@ class Report {
   constructor(status: string[]) {
     status.forEach((entry) => {
       if (entry) {
-        const code = entry.slice(0, 2).trim();
-        const file = entry.slice(3);
+        entry = entry.trim();
+        let delimiterIndex = entry.indexOf(' ');
+        if (delimiterIndex === -1) {
+          throw new Error('error parsing status porcelain');
+        }
+        const code = entry.slice(0, delimiterIndex).trim();
+        const file = entry.slice(delimiterIndex + 1);
         if (code.includes('?') || code.includes('A')) {
           this.willDelete.push(file);
         } else if (code === 'DU' || code === 'D') {

@@ -15,6 +15,12 @@
 - glossary command with advanced git terms
 - completions
 
+## [0.8.1] - 2026-01-30
+
+### Fixed
+
+- Fixed formatting and reset behavior of wipe command
+
 ## [0.8.0] - 2026-01-27
 
 ### Added
