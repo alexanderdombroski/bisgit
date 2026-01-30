@@ -43,4 +43,8 @@ Run `gi` or `bisgit` for full TUI.
 - `gi exclude` and `gi include` allows you to ignore files locally without modifying the .gitignore file.
 - `gi remote-default` shows whether the remote default branch is 'main', 'master', etc.
 
+## Tips
+
+- If using this in VS Code's integrated terminal, I'd recommend disabling `terminal.integrated.stickyScroll.enabled` or adding gi to `terminal.integrated.stickyScroll.ignoredCommands`
+
 I turned many of my git aliases into commands. The original aliases are found this [gist](https://gist.github.com/alexanderdombroski/ddac491daeff48c5f1346ba2960462fa).
