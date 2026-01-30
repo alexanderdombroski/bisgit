@@ -42,6 +42,7 @@ Run `gi` or `bisgit` for full TUI.
 - `gi churn` shows you the 25 most edited files.
 - `gi exclude` and `gi include` allows you to ignore files locally without modifying the .gitignore file.
 - `gi remote-default` shows whether the remote default branch is 'main', 'master', etc.
+- `gi update` updates the cli via npm
 
 ## Tips
 
