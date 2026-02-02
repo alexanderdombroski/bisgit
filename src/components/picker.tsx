@@ -5,7 +5,7 @@ export type Item<T> = { value: T; label: string };
 type PickerProps<T> = {
   items: Item<T>[];
   prompt: string;
-  onSelect: (item: Item<T>) => void;
+  onSelect: (item: Item<T>) => Promise<void>;
 };
 
 export function Picker<T>({ prompt, onSelect, items }: PickerProps<T>) {
@@ -17,10 +17,15 @@ export function Picker<T>({ prompt, onSelect, items }: PickerProps<T>) {
     }
   });
 
+  const runOnSelect = async (item: Item<T>) => {
+    await onSelect(item);
+    exit();
+  };
+
   return (
     <Box flexDirection="column">
       <Text>{prompt}</Text>
-      <SelectInput items={items} onSelect={onSelect} />
+      <SelectInput items={items} onSelect={runOnSelect} />
     </Box>
   );
 }

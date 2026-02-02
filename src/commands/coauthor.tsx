@@ -19,8 +19,8 @@ export async function coauthor() {
       })
     );
 
-    const onSelect = ({ value: { name, email } }: Item<Committer>) => {
-      createCoauthorCommit(name, email.slice(1, -1));
+    const onSelect = async ({ value: { name, email } }: Item<Committer>) => {
+      await createCoauthorCommit(name, email.slice(1, -1));
     };
 
     render(<Picker items={choices} prompt="Who assisted in this commit?" onSelect={onSelect} />);

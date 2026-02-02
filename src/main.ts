@@ -1,4 +1,4 @@
-import { getCommand } from './utils/args';
+import { getArgList, getCommand } from './utils/args';
 import { requireGitRepo } from './utils/guards';
 
 async function main() {
@@ -7,6 +7,11 @@ async function main() {
     requireGitRepo();
     const { renderApp } = await import('./pages/index.jsx');
     return renderApp();
+  }
+
+  if (getArgList().length === 0) {
+    const { runOverload } = await import('./overloads/index.js');
+    if (await runOverload(cmd)) return;
   }
 
   const { runCommand } = await import('./commands/index.js');

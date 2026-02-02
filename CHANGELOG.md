@@ -15,6 +15,12 @@
 - glossary command with advanced git terms
 - completions
 
+## [0.9.0] - UNRELEASED
+
+### Added
+
+- TODO - Add command overloads (ie switch shows a list of branches and you select one)
+
 ## [0.8.1] - 2026-01-30
 
 ### Fixed
