@@ -29,7 +29,7 @@ export const execAsync = promisify(exec);
 
 export async function parseStdoutByLine(command: string): Promise<string[]> {
   const { stdout } = await execAsync(command);
-  const output = stdout.trim();
+  const output = stdout.trimEnd();
   return output ? output.split(/\r?\n/) : [];
 }
 

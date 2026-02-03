@@ -73,7 +73,7 @@ export async function isDiffClean(): Promise<boolean> {
   return !stdout?.trim();
 }
 
-export async function getStatusPorcelain(): Promise<string[] | undefined> {
+export async function getStatusPorcelain(): Promise<string[]> {
   return await parseStdoutByLine('git status --porcelain');
 }
 
