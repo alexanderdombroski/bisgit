@@ -15,7 +15,7 @@
 - glossary command with advanced git terms
 - completions
 
-## [0.9.0] - UNRELEASED
+## [0.9.0] - 2026-02-02
 
 ### Added
 
