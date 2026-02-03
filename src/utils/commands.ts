@@ -1,4 +1,4 @@
-import { exec, spawn } from 'node:child_process';
+import { exec, spawn, execFile } from 'node:child_process';
 import type { SpawnOptions, StdioOptions } from 'node:child_process';
 import { promisify } from 'node:util';
 
@@ -26,6 +26,7 @@ export function spawnCommand(cmd: string, args: string[], options?: Options) {
 }
 
 export const execAsync = promisify(exec);
+export const execFileAsync = promisify(execFile);
 
 export async function parseStdoutByLine(command: string): Promise<string[]> {
   const { stdout } = await execAsync(command);

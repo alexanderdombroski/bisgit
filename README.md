@@ -49,3 +49,5 @@ Run `gi` or `bisgit` for full TUI.
 - If using this in VS Code's integrated terminal, I'd recommend disabling `terminal.integrated.stickyScroll.enabled` or adding gi to `terminal.integrated.stickyScroll.ignoredCommands`
 
 I turned many of my git aliases into commands. The original aliases are found this [gist](https://gist.github.com/alexanderdombroski/ddac491daeff48c5f1346ba2960462fa).
+
+This also works as a wrapper for git and gh commands. Some commands that don't normally do anything are given a purpose, such as `git switch` or `git config` with no arguments.

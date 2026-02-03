@@ -19,7 +19,8 @@
 
 ### Added
 
-- TODO - Add command overloads (ie switch shows a list of branches and you select one)
+- Added git switch command overload
+- Added git config command overload
 
 ## [0.8.1] - 2026-01-30
 
