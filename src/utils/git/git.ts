@@ -1,5 +1,5 @@
 import { normalize } from 'node:path';
-import { execAsync, parseStdoutByLine, spawnAsync } from './commands';
+import { execAsync, parseStdoutByLine, spawnAsync } from '../commands';
 
 export async function getCurrentBranch() {
   const { stdout } = await execAsync('git branch --show-current');
@@ -71,10 +71,6 @@ export async function gitFetch(remote?: string, branch?: string) {
 export async function isDiffClean(): Promise<boolean> {
   const { stdout } = await spawnAsync('git', ['status', '--porcelain']);
   return !stdout?.trim();
-}
-
-export async function getStatusPorcelain(): Promise<string[]> {
-  return await parseStdoutByLine('git status --porcelain');
 }
 
 export async function getMergeBase(ref1: string, ref2: string) {
