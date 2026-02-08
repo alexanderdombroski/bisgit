@@ -6,6 +6,8 @@ Run `gi` or `bisgit` for full TUI.
 
 ## Commands
 
+Each of these commands work with `gi` or `bisgit`. Just found out gi isn't going to work in powershell because it's already an alias for get-item.
+
 ### Commit Tooling
 
 - `gi sha <commit>` copies the shortend sha to clipboard (uses HEAD as default)
