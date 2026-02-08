@@ -9,15 +9,27 @@ import { Files } from '../../pages/files';
 import { TreeNavigationProvder } from '../../pages/files/useTreeNavigation';
 import { MessagingProvder } from '../hooks/useMessaging';
 import { Stashes } from '../../pages/stashes';
+import { useStatus } from '../hooks/useStatus';
 
 export function Router() {
-  const { prevSection, nextSection, activeGroup, setActiveGroup } = useNav();
+  const { prevSection, nextSection, activeGroup, setActiveGroup, setActiveSection, activeSection } =
+    useNav();
+  const { status } = useStatus();
+  const isUnmergedState = status.some(({ changeType }) => changeType === 'U');
 
   useInput((input, key) => {
     if (key.tab && key.shift) {
-      prevSection();
+      if (activeSection === 'Status' && !isUnmergedState) {
+        setActiveSection('Changes');
+      } else {
+        prevSection();
+      }
     } else if (key.tab) {
-      nextSection();
+      if (activeSection === 'Changes' && !isUnmergedState) {
+        setActiveSection('Status');
+      } else {
+        nextSection();
+      }
     } else if (input === '1') {
       setActiveGroup('Files');
     } else if (input === '2') {

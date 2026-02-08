@@ -5,6 +5,7 @@ import { NavProvider } from '../components/navigation/useNav';
 import { ThemeProvider } from '../components/hooks/useTheme';
 import { ModalProvider } from '../components/modal';
 import { TruncationModeProvder } from '../components/hooks/useTruncationMode';
+import { StatusProvder } from '../components/hooks/useStatus';
 
 function Root() {
   return (
@@ -13,7 +14,9 @@ function Root() {
         <KeybindingsProvider>
           <TruncationModeProvder>
             <ModalProvider>
-              <App />
+              <StatusProvder>
+                <App />
+              </StatusProvder>
             </ModalProvider>
           </TruncationModeProvder>
         </KeybindingsProvider>

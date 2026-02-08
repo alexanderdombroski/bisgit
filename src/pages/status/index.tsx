@@ -1,25 +1,16 @@
-import { Box, Text } from 'ink';
+import { Box } from 'ink';
 import { useDimensions } from '../../components/hooks/useDimensions';
-import { Section } from '../../components/section';
-import { useResolved } from '../../components/hooks/useResolved';
-import { getStatusPorcelain } from '../../utils/git';
-import { StatusProvder } from './useStatus';
+import { FileList } from './fileList';
+import { StatusDetails } from './statusDetails';
 
 function AllSections() {
   const { width, sectionHeight } = useDimensions();
 
-  const { value: status } = useResolved(getStatusPorcelain);
-
   return (
-    <StatusProvder>
-      <Box width={width} height={sectionHeight}>
-        <Section title="Status" innerHeight={sectionHeight - 1}>
-          {status?.map((file) => (
-            <Text key={file}>{file}</Text>
-          ))}
-        </Section>
-      </Box>
-    </StatusProvder>
+    <Box width={width} height={sectionHeight} flexDirection="row">
+      <FileList />
+      <StatusDetails />
+    </Box>
   );
 }
 

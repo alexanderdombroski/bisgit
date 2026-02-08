@@ -3,6 +3,9 @@ import { useState, createContext, useContext, type PropsWithChildren } from 'rea
 export const sections = {
   Files: 'Files',
   'File Meta': 'Files',
+  Staged: 'Status',
+  Changes: 'Status',
+  Unmerged: 'Status',
   Status: 'Status',
   Log: 'Log',
   'Commit Details': 'Log',
@@ -37,7 +40,7 @@ export function NavProvider({ children }: PropsWithChildren) {
   const unlock = () => setIsLocked(false);
 
   const [activeGroup, _setActiveGroup] = useState<SectionGroup>('Status');
-  const [activeSection, _setActiveSection] = useState<Section>('Status');
+  const [activeSection, _setActiveSection] = useState<Section>('Staged');
 
   const setActiveSection = (section: Section) => {
     if (isLocked) return;
