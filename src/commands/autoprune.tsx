@@ -15,11 +15,15 @@ export async function autoprune() {
   await execAsync(`git switch ${defaultBranch}`);
 
   const pull = (async () => {
-    await spawnGitWithColor(['fetch', '--prune', '--prune-tags']);
+    const { stdout } = await execAsync('git fetch --prune --prune-tags');
     await smartPull(remote, defaultBranch);
+    return { prunedRefs: stdout.trim() };
   })();
   render(<WithProgress msg="Fetching and pruning remote references" promise={pull} />);
-  await pull;
+  const { prunedRefs } = await pull;
+  if (prunedRefs) {
+    console.log(prunedRefs);
+  }
 
   const branches = await getBranchList();
   for (const branch of branches) {

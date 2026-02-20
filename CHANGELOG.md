@@ -15,6 +15,14 @@
 - glossary command with advanced git terms
 - completions
 
+## [0.10.0] - UNRELEASED
+
+### Added
+
+### Fixed
+
+- Pruned remote branches and tags won't break autoprune cli spinner
+
 ## [0.9.0] - 2026-02-02
 
 ### Added
