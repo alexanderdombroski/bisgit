@@ -4,14 +4,15 @@ import { useResolved } from './useResolved';
 
 type StatusType = {
   status: FileStatus[];
+  refresh: () => void;
 };
 
 const Status = createContext({} as StatusType);
 
 export function StatusProvder({ children }: PropsWithChildren) {
-  const { value: status = [] } = useResolved(getStatus);
+  const { value: status = [], refresh } = useResolved(getStatus);
 
-  return <Status.Provider value={{ status }}>{children}</Status.Provider>;
+  return <Status.Provider value={{ status, refresh }}>{children}</Status.Provider>;
 }
 
 export function useStatus(): StatusType {
