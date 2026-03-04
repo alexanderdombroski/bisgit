@@ -2,17 +2,15 @@ import path from 'node:path';
 import os from 'node:os';
 import fs from 'node:fs/promises';
 import { createContext, type PropsWithChildren, useContext } from 'react';
-import { useResolved } from './useResolved';
 import { exists } from '../../utils/fs';
 
-type ThemeContextType = {
+type ThemeContextType = Readonly<{
   bgColor?: string;
-};
+}>;
 
 const ThemeContext = createContext<ThemeContextType>({} as ThemeContextType);
 
-export function ThemeProvider({ children }: PropsWithChildren) {
-  const { value: bgColor } = useResolved(getTerminalBackgroundColor);
+export function ThemeProvider({ children, bgColor }: PropsWithChildren<ThemeContextType>) {
   return <ThemeContext.Provider value={{ bgColor }}>{children}</ThemeContext.Provider>;
 }
 
@@ -27,11 +25,7 @@ export const useTheme = () => {
 
 // ---------- Utilities ----------
 
-/**
- * Attempts to detect the terminal background color using ANSI OSC 11.
- * @returns Hex color
- */
-async function getTerminalBackgroundColor(): Promise<string | undefined> {
+export async function detectTheme(): Promise<string | undefined> {
   if (!process.stdin.isTTY || !process.stdout.isTTY) {
     return undefined;
   }
@@ -40,7 +34,20 @@ async function getTerminalBackgroundColor(): Promise<string | undefined> {
     return await getThemeFromVSCode();
   }
 
-  return new Promise<string | undefined>((resolve) => {
+  const theme = queryOsc11();
+  if (!process.stdin.isRaw || process.stdin.isPaused()) {
+    console.error('Error querying the terminal background color');
+    process.exit(1);
+  }
+  return theme;
+}
+
+/**
+ * Attempts to detect the terminal background color using ANSI OSC 11.
+ * @returns Hex color
+ */
+async function queryOsc11(): Promise<string | undefined> {
+  return new Promise((resolve) => {
     const QUERY = '\x1b]11;?\x07';
     let buffer = '';
     let timeout: NodeJS.Timeout;
@@ -50,24 +57,19 @@ async function getTerminalBackgroundColor(): Promise<string | undefined> {
       process.stdin.off('data', onData);
       try {
         process.stdin.setRawMode(false);
-        process.stdin.pause();
       } catch {}
       resolve(result);
     };
 
-    // OSC 11 query: "Report background color"
-    const onData = (data: Buffer | string) => {
+    const onData = (data: Buffer) => {
       buffer += data.toString('ascii');
 
-      // Expected response format:
-      // ESC ] 11 ; rgb:RRRR/GGGG/BBBB BEL
       const match = buffer.match(
         /\x1b]11;rgb:([0-9a-fA-F]{1,4})\/([0-9a-fA-F]{1,4})\/([0-9a-fA-F]{1,4})\x07/
       );
 
       if (match) {
-        const hex = rgbToHex(match[1], match[2], match[3]);
-        cleanup(hex);
+        cleanup(rgbToHex(match[1], match[2], match[3]));
       }
     };
 
@@ -76,9 +78,7 @@ async function getTerminalBackgroundColor(): Promise<string | undefined> {
       process.stdin.resume();
       process.stdin.on('data', onData);
 
-      // Fail fast if terminal doesn't respond
       timeout = setTimeout(() => cleanup(undefined), 150);
-
       process.stdout.write(QUERY);
     } catch {
       cleanup(undefined);
