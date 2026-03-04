@@ -15,13 +15,12 @@
 - glossary command with advanced git terms
 - completions
 
-## [0.10.0] - UNRELEASED
-
-### Added
+## [0.9.1] - 2026-03-04
 
 ### Fixed
 
 - Pruned remote branches and tags won't break autoprune cli spinner
+- Fixed issue causing background color detection to interfere with ink's input detection
 
 ## [0.9.0] - 2026-02-02
 
