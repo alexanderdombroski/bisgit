@@ -15,12 +15,29 @@ export type FileStatus = {
 export async function getStatus(): Promise<FileStatus[]> {
   const statusLines = await getStatusPorcelain();
 
-  const status = statusLines.map(
-    (line): FileStatus => ({
-      staged: line[1] === ' ',
-      changeType: (line[0] || line[1]) as ChangeType,
-      name: line.slice(3),
-    })
-  );
+  const status: FileStatus[] = [];
+
+  for (const line of statusLines) {
+    const stagedStatus = line[0];
+    const worktreeStatus = line[1];
+    const name = line.slice(3);
+
+    if (stagedStatus !== ' ') {
+      status.push({
+        staged: true,
+        changeType: stagedStatus as ChangeType,
+        name,
+      });
+    }
+
+    if (worktreeStatus !== ' ') {
+      status.push({
+        staged: false,
+        changeType: worktreeStatus as ChangeType,
+        name,
+      });
+    }
+  }
+
   return status;
 }
