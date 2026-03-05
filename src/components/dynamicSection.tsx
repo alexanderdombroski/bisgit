@@ -1,13 +1,14 @@
-import { type PropsWithChildren, useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useNav, type Section as SectionTitle } from './navigation';
 import { Box, measureElement } from 'ink';
 import { useVariableSectionHeights } from './hooks/useVariableSectionHeights';
 import { Section } from './section';
 
-type DynamicSectionProps = PropsWithChildren<{
+type DynamicSectionProps = {
   title: SectionTitle;
   sections: SectionTitle[];
-}>;
+  children: (sectionHeight: number) => React.ReactNode;
+};
 
 export function DynamicSection({ title, sections, children }: DynamicSectionProps) {
   const ref = useRef(null);
@@ -25,7 +26,7 @@ export function DynamicSection({ title, sections, children }: DynamicSectionProp
   return (
     <Box ref={ref} height={calcSectionHeight(title)}>
       <Section title={title} innerHeight={sectionHeight}>
-        {children}
+        {children(sectionHeight)}
       </Section>
     </Box>
   );
