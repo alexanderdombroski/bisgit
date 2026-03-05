@@ -1,12 +1,15 @@
 import { Box, Text, useInput } from 'ink';
 import { useStatus } from '../../components/hooks/useStatus';
 import { useNav, type Section as SectionTitle } from '../../components/navigation';
-import { useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 import { useDimensions } from '../../components/hooks/useDimensions';
 import { DynamicSection } from '../../components/dynamicSection';
 import { useScrollable } from '../../components/hooks/useScrollable';
 import { type FileStatus } from '../../utils/git';
 import { useTruncationMode } from '../../components/hooks/useTruncationMode';
+import { useKeybindings } from '../../components/hooks/useKeybindings';
+import { useErrorCatcher } from '../../components/hooks/useErrorCatcher';
+import { execAsync } from '../../utils/commands';
 
 type StatusFilter = (status: FileStatus) => boolean;
 
@@ -62,9 +65,24 @@ type ListProps = {
 function StatusList({ sectionHeight, filterCondition, title }: ListProps) {
   const { isLocked, activeSection } = useNav();
   const { mode } = useTruncationMode();
-  const { status } = useStatus();
+  const { status, refresh } = useStatus();
   const filtered = useMemo(() => status.filter(filterCondition), [status]);
   const { selectedValue, outList, scrollDown, scrollUp } = useScrollable(filtered, sectionHeight);
+  const { attempt } = useErrorCatcher();
+
+  const inStagingArea = activeSection === 'Staged';
+  const inOtherFileList = activeSection === 'Changes' || activeSection === 'Unmerged';
+
+  const { setKeybinding, removeKeybinding } = useKeybindings();
+
+  useEffect(() => {
+    if (inStagingArea) {
+      setKeybinding('a', 'unstage');
+    } else if (inOtherFileList) {
+      setKeybinding('a', 'stage');
+    }
+    return () => removeKeybinding('a');
+  }, [activeSection]);
 
   useInput((input, key) => {
     if (activeSection !== title || isLocked) return;
@@ -73,6 +91,16 @@ function StatusList({ sectionHeight, filterCondition, title }: ListProps) {
       scrollUp();
     } else if (key.downArrow) {
       scrollDown();
+    }
+
+    if (!selectedValue) return;
+    if (input === 'a') {
+      if (inStagingArea) {
+        attempt(() => unstage(selectedValue.name));
+      } else if (inOtherFileList) {
+        attempt(() => stage(selectedValue.name));
+      }
+      refresh();
     }
   });
 
@@ -88,4 +116,12 @@ function StatusList({ sectionHeight, filterCondition, title }: ListProps) {
       ))}
     </>
   );
+}
+
+async function stage(file: string) {
+  await execAsync(`git add "${file}"`);
+}
+
+async function unstage(file: string) {
+  await execAsync(`git restore --staged "${file}"`);
 }
