@@ -1,10 +1,9 @@
-import { Box, measureElement, Text } from 'ink';
-import { Section } from '../../components/section';
+import { Box, Text } from 'ink';
 import { useStatus } from '../../components/hooks/useStatus';
-import { useNav, type Section as SectionTitle } from '../../components/navigation';
-import { useVariableSectionHeights } from '../../components/hooks/useVariableSectionHeights';
-import { type PropsWithChildren, useEffect, useMemo, useRef, useState } from 'react';
+import { type Section as SectionTitle } from '../../components/navigation';
+import { useMemo } from 'react';
 import { useDimensions } from '../../components/hooks/useDimensions';
+import { DynamicSection } from '../../components/dynamicSection';
 
 export function FileList() {
   const { status } = useStatus();
@@ -47,33 +46,6 @@ export function FileList() {
           ))}
         </DynamicSection>
       )}
-    </Box>
-  );
-}
-
-type DynamicSectionProps = PropsWithChildren<{
-  title: SectionTitle;
-  sections: SectionTitle[];
-}>;
-
-function DynamicSection({ title, sections, children }: DynamicSectionProps) {
-  const ref = useRef(null);
-  const { activeSection } = useNav();
-  const [sectionHeight, setSectionHeight] = useState(0);
-  useEffect(() => {
-    if (ref.current) {
-      const { height } = measureElement(ref.current);
-      setSectionHeight(height - 1);
-    }
-  }, [ref.current, activeSection]);
-
-  const { calcSectionHeight } = useVariableSectionHeights(sections);
-
-  return (
-    <Box ref={ref} height={calcSectionHeight(title)}>
-      <Section title={title} innerHeight={sectionHeight}>
-        {children}
-      </Section>
     </Box>
   );
 }
