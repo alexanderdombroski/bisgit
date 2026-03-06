@@ -29,6 +29,6 @@ export const renderApp = async () => {
     <ThemeProvider bgColor={bgColor}>
       <Root />
     </ThemeProvider>,
-    { patchConsole: true }
+    { patchConsole: true, incrementalRendering: true }
   );
 };

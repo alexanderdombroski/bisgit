@@ -7,9 +7,10 @@ import { Modal } from './modal';
 type ModalProps = {
   title: string;
   handleSubmit: (value: string) => void;
+  width?: number;
 };
 
-export function ModalInput({ title, handleSubmit }: ModalProps) {
+export function ModalInput({ title, handleSubmit, width }: ModalProps) {
   const [value, setValue] = useState('');
   const { isOpen, close } = useModal();
 
@@ -25,7 +26,7 @@ export function ModalInput({ title, handleSubmit }: ModalProps) {
 
   return (
     isOpen && (
-      <Modal title={title}>
+      <Modal title={title} width={width}>
         <TextInput value={value} onChange={setValue} />
       </Modal>
     )
