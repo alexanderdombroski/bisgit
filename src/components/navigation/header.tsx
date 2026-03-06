@@ -7,7 +7,7 @@ const sectionGroups = Array.from(new Set(Object.values(sections)));
 export const NavigationHeader = memo<{ activeGroup: string }>(
   ({ activeGroup }) => {
     return (
-      <Box width="100%" flexDirection="row" height={1}>
+      <Box width="100%" flexDirection="row" flexWrap="wrap">
         {sectionGroups.map((group, i) => (
           <Box
             key={group}
