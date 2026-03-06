@@ -22,7 +22,7 @@ export function Tree() {
   const { setKeybinding, removeKeybinding } = useKeybindings();
   useEffect(() => {
     if (activeSection === 'Files') {
-      setKeybinding(NAVIGATION_KEY, 'NAVIGATION_KEY');
+      setKeybinding(NAVIGATION_KEY, 'navigate');
       return () => removeKeybinding(NAVIGATION_KEY);
     }
   }, [activeSection]);
