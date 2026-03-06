@@ -15,6 +15,17 @@
 - glossary command with advanced git terms
 - completions
 
+## [0.10.0] - 2026-03-05
+
+### Added
+
+- Add status lists to main TUI
+- Add add/commit keybindings
+
+### Fixed
+
+- Main TUI header/footer are more responsive on smaller terminals
+
 ## [0.9.1] - 2026-03-04
 
 ### Fixed
