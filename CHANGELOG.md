@@ -15,6 +15,12 @@
 - glossary command with advanced git terms
 - completions
 
+## [0.10.1] - UNRELEASED
+
+### Fixed
+
+- Commit message of gi savepoint
+
 ## [0.10.0] - 2026-03-05
 
 ### Added
