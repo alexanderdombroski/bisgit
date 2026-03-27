@@ -18,6 +18,7 @@ import { rebranch } from './rebranch';
 import { remoteDefault } from './remoteDefault';
 import { savepoint } from './savepoint';
 import { sha } from './sha';
+import { syncfork } from './syncfork';
 import { track } from './track';
 import { update } from './update';
 import { showVersion } from './version';
@@ -46,6 +47,7 @@ const commands: Record<string, () => void | Promise<void>> = {
   'remote-default': remoteDefault,
   savepoint,
   sha,
+  syncfork,
   track,
   update,
   '--version': showVersion,

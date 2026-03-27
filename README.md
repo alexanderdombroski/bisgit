@@ -36,6 +36,7 @@ Each of these commands work with `gi` or `bisgit`. Just found out gi isn't going
 - `gi whoami` shows github username.
 - `gi languages` prints the percentages of languages for this repo.
 - `gi coauthor <username?>` commits with a co-authorship description.
+- `gi syncfork` syncs main with upstream main (use `git pull` after).
 
 ### Utility
 
