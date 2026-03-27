@@ -10,7 +10,7 @@ export async function lines() {
   const args = getArgList();
   const [ref1, ref2] = args.filter((arg) => arg !== '-v');
 
-  let details = [];
+  const details = [];
   if (isStashRef(ref1)) {
     details.push(...(await getLinesChanged(`${ref1}^3`)));
     details.push(...(await getLinesChanged(`${ref1}^2`)));

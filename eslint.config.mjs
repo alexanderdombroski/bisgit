@@ -40,6 +40,7 @@ export default [
 				},
 			],
 
+			'prefer-const': 'warn',
 			'no-unused-vars': ['warn', { vars: 'all', args: 'after-used', ignoreRestSiblings: false }],
 			eqeqeq: 'warn',
 			'no-throw-literal': 'warn',

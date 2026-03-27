@@ -43,7 +43,7 @@ class Report {
     status.forEach((entry) => {
       if (entry) {
         entry = entry.trim();
-        let delimiterIndex = entry.indexOf(' ');
+        const delimiterIndex = entry.indexOf(' ');
         if (delimiterIndex === -1) {
           throw new Error('error parsing status porcelain');
         }

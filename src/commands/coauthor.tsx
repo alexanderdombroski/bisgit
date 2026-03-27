@@ -62,7 +62,7 @@ type Committer = {
 async function getCommiters(): Promise<Committer[]> {
   const commiters = await parseStdoutByLine('git log --format="%an|<%ae>"');
   const map = new Map<string, Committer>();
-  for (let line of commiters) {
+  for (const line of commiters) {
     const [name, email] = line.split('|');
     const key = `${name}|${email}`;
     if (!map.has(key)) {

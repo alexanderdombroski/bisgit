@@ -72,7 +72,7 @@ export function TreeNavigationProvder({ children }: PropsWithChildren) {
     if (folderAction) {
       const contents = getContents(tree, selectedFile);
       if (!contents) return;
-      for (let file of Object.keys(contents)) {
+      for (const file of Object.keys(contents)) {
         const path = `${selectedFile}/${file}`;
         folderAction === 'expand'
           ? expandedFiles.current.add(path)
@@ -144,7 +144,7 @@ export function useTreeNavigation(): TreeNavigationType {
 export const getContents = (tree: Tree, path: string) => {
   const parts = path.split('/');
   let contents = tree;
-  for (let part of parts) {
+  for (const part of parts) {
     contents = contents[part];
   }
   return contents;
