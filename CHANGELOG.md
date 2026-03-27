@@ -15,7 +15,11 @@
 - glossary command with advanced git terms
 - completions
 
-## [0.10.1] - UNRELEASED
+## [0.11.0] - 2026-03-27
+
+### Added
+
+- gi syncfork command
 
 ### Fixed
 
