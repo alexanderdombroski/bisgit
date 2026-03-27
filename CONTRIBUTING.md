@@ -20,6 +20,12 @@ Install dependencies with `npm i`
 1. `npm run package`
 2. `npm run start`
 
+### Production build alpha install
+
+1. `npm run package`
+2. `npm pack`
+3. `npm i -g bisgit-<version>.tgz`
+
 ## Debug with VS Code
 
 - ensure you have extensions installed in [extensions.json](./.vscode/extensions.json)
