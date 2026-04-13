@@ -15,6 +15,12 @@
 - glossary command with advanced git terms
 - completions
 
+## [0.12.0] - UNRELEASED
+
+### Added
+
+- Migrated to ink v7
+
 ## [0.11.0] - 2026-03-27
 
 ### Added
