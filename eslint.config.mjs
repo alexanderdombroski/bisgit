@@ -1,5 +1,4 @@
-import typescriptEslint from '@typescript-eslint/eslint-plugin';
-import tsParser from '@typescript-eslint/parser';
+import { plugin as tsPlugin, parser as tsParser } from "typescript-eslint";
 import importPlugin from 'eslint-plugin-import';
 
 export default [
@@ -12,7 +11,7 @@ export default [
 	},
 	{
 		plugins: {
-			'@typescript-eslint': typescriptEslint,
+			'@typescript-eslint': tsPlugin,
 		},
 
 		languageOptions: {
