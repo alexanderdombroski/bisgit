@@ -29,6 +29,7 @@ Each of these commands work with `gi` or `bisgit`. Just found out gi isn't going
 - `gi rebranch` If conflicts won't exist, create new branch from main and cherry-pick all commits from $
 - `gi track <branch>` copies a remote branch to a local one and sets the origin upstream.
 - `gi yank` is a force pull for the current branch. It commits a WIP commit and/or backup branch if commits don't exist in remote. Then it resets the local branch to match the remote. Useful way to handle a collaborator's force push.
+- `gi wt <branch?>` Creates a worktree with random name if none is provided
 
 ### Github
 

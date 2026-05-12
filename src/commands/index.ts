@@ -24,6 +24,7 @@ import { update } from './update';
 import { showVersion } from './version';
 import { whoami } from './whoami';
 import { wipe } from './wipe';
+import { wt } from './wt';
 import { yank } from './yank';
 
 const commands: Record<string, () => void | Promise<void>> = {
@@ -53,6 +54,7 @@ const commands: Record<string, () => void | Promise<void>> = {
   '--version': showVersion,
   whoami,
   wipe,
+  wt,
   yank,
 };
 
