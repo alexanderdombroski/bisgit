@@ -15,11 +15,12 @@
 - glossary command with advanced git terms
 - completions
 
-## [0.12.0] - UNRELEASED
+## [0.12.0] - 2026-05-12
 
 ### Added
 
 - Migrated to ink v7
+- Added worktree helper command
 
 ## [0.11.0] - 2026-03-27
 
