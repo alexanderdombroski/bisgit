@@ -78,6 +78,11 @@ export async function getMergeBase(ref1: string, ref2: string) {
   return stdout.trim();
 }
 
+export async function isAncestor(dest: string, source: string) {
+  const { code } = await spawnAsync('git', ['merge-base', '--is-ancestor', dest, source]);
+  return code === 0;
+}
+
 export async function canMerge(from: string, into: string): Promise<boolean> {
   const base = await getMergeBase(from, into);
   const { stdout } = await spawnAsync('git', ['merge-tree', base, into, from]);

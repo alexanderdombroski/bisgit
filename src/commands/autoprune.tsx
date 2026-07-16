@@ -4,7 +4,7 @@ import { requireCleanStatus } from '../utils/guards';
 import { smartPull } from './backMerge';
 import { getRemoteDefault } from './remoteDefault';
 import { WithProgress } from '../components/withProgress';
-import { getBranchList, getMergeBase } from '../utils/git';
+import { getBranchList, getMergeBase, isAncestor } from '../utils/git';
 
 const RESERVED_BRANCHES = ['master', 'main', 'development', 'lingoport'];
 
@@ -37,13 +37,7 @@ export async function autoprune() {
     }
 
     // Delete merged branches
-    const { code: isAncestorCode } = await spawnAsync('git', [
-      'merge-base',
-      '--is-ancestor',
-      branch,
-      defaultBranch,
-    ]);
-    if (isAncestorCode === 0) {
+    if (await isAncestor(branch, defaultBranch)) {
       deleteBranch(branch);
       continue;
     }
