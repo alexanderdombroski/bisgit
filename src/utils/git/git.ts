@@ -44,6 +44,11 @@ export async function getGitDir() {
   return normalize(stdout.trim());
 }
 
+export async function getGitCommonDir() {
+  const { stdout } = await execAsync('git rev-parse --git-common-dir');
+  return normalize(stdout.trim());
+}
+
 /** Returns the root of the repo or worktree */
 export async function getGitDirRoot(): Promise<string> {
   const { stdout } = await execAsync('git rev-parse --show-toplevel');
