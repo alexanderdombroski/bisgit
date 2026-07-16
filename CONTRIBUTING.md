@@ -20,6 +20,11 @@ Install dependencies with `npm i`
 1. `npm run package`
 2. `npm run start`
 
+### Separate repo
+
+1. `npm run build`
+2. `node ~/path/to/bisgit/dist/main.js <arg> <arg>`
+
 ### Production build alpha install
 
 1. `npm run package`
