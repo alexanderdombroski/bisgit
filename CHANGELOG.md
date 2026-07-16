@@ -15,6 +15,12 @@
 - glossary command with advanced git terms
 - completions
 
+## [0.12.1] - 2026-07-16
+
+### Added
+
+- Added worktree sync command
+
 ## [0.12.0] - 2026-05-12
 
 ### Added
