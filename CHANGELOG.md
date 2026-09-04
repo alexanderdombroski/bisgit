@@ -15,14 +15,14 @@
 - glossary command with advanced git terms
 - completions
 
-## [0.13.0] - UNRELEASED
+## [0.13.0] - 2026-09-04
 
 ### Added
 
 - bisgit worktree subcommands
-- `gi wt add` replaces `git wt`
-- `gi wt rm` to remove a worktree and branch
-- `gi wt ls` shorthand for git worktree list
+  - `gi wt add` replaces `gi wt`
+  - `gi wt rm` to remove a worktree and branch
+  - `gi wt ls` shorthand for git worktree list
 
 ### Fixed
 
