@@ -1,7 +1,8 @@
 import { plugin as tsPlugin, parser as tsParser } from "typescript-eslint";
+import { defineConfig } from "eslint/config"
 import importPlugin from 'eslint-plugin-import';
 
-export default [
+export default defineConfig([
 	importPlugin.flatConfigs.typescript,
 	{
 		ignores: ['node_modules/**', 'dist/**'],
@@ -53,4 +54,4 @@ export default [
 			'no-unused-vars': 'off',
 		},
 	},
-];
+]);

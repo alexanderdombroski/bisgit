@@ -20,11 +20,10 @@ async function main() {
   const { runWrapper } = await import('./wrapper/index.js');
   if (await runWrapper(cmd)) return;
 
-  console.error('unknown command');
-  process.exit(1);
+  throw new Error('unknown command');
 }
 
 main().catch((error) => {
-  console.error(`An error occurred: ${error.stderr ?? error.message}`);
+  console.error(`Error: ${error.stderr ?? error.message}`);
   process.exit(1);
 });
